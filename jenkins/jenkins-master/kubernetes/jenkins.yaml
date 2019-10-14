@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: jenkins-master
+ namespace: jenkins
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+    app: jenkins-master
+ template:
+  metadata:
+   labels:
+    app: jenkins-master
+   annotations:
+    seccomp.security.alpha.kubernetes.io/pod: docker/default
+  spec:
+   serviceAccountName: jenkins-service-account
+   containers:
+   - name: master
+     image: 'shaker242/jenkins:0919'
+     securityContext:
+       allowPrivilegeEscalation: false
+     ports:
+     - containerPort: 8080
+     - containerPort: 50000
+     readinessProbe:
+      # httpGet:
+      #  path: /login
+      #  port: 8080
+      # periodSeconds: 10
+      # timeoutSeconds: 5
+      # successThreshold: 2
+      # failureThreshold: 5
+     volumeMounts:
+     - mountPath: /var/jenkins_home
+       name: jenkins
+     - mountPath: /usr/bin/docker
+       name: docker
+     - mountPath: "/var/run/docker.sock"
+       name: docker-sock
+     resources:
+      limits:
+       cpu: 500m
+       memory: 1500Mi
+      requests:
+       cpu: 500m
+       memory: 1500Mi
+   volumes:
+   - name: jenkins
+     persistentVolumeClaim:
+      claimName: jenkins
+   - name: docker
+     hostPath:
+      path: /usr/bin/docker
+      type: File
+   - name: docker-sock
+     hostPath:
+      path: /var/run/docker.sock
+      # type: Socket
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: slow

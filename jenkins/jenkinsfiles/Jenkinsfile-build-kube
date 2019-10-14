@@ -1,0 +1,81 @@
+def dtr_creds = '341ab591-1432-44e7-a28c-44bf7fb3871e'
+def dtr_url = 'dtr.olly.dtcntr.net'
+def dtr_repo = 'dave/demo-app'
+
+def git_url = 'https://github.com/ollypom/ee-demo-app.git'
+
+podTemplate(label: 'builddocker', yaml: """
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-slave
+  namespace: jenkins
+  labels:
+    name: jenkins-slave
+  annotations:
+   seccomp.security.alpha.kubernetes.io/pod: docker/default
+spec:
+  imagePullSecrets:
+    - name: dtrpass
+  initContainers:
+    # This container clones the desired git repo to the EmptyDir volume.
+    - name: git-clone
+      image: 'dtr.olly.dtcntr.net/admin/jq:1'
+      imagePullPolicy: Always
+      args:
+        - git
+        - clone
+        - --single-branch
+        - --
+        - https://github.com/ollypom/ee-demo-app
+        - /repo # Put it in the volume
+      securityContext:
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - name: git-repo
+          mountPath: /repo
+  containers:
+  - name: builder
+    image: 'dtr.olly.dtcntr.net/admin/jenkins-slave:0.9'
+    imagePullPolicy: Always
+    volumeMounts:
+    - name: docker-sock-volume
+      mountPath: "/var/run/docker.sock"
+    - name: git-repo
+      mountPath: /repo
+    command: ["sh", "-c", "tail -f /dev/null"]
+  volumes:
+  - name: docker-sock-volume
+    hostPath:
+      path: /var/run/docker.sock
+  - name: git-repo
+    emptyDir: {}
+"""
+  ) {
+
+  node('builddocker') {
+    withCredentials([
+        [$class: 'UsernamePasswordMultiBinding', credentialsId: dtr_creds, usernameVariable: 'DTR_USR', passwordVariable: 'DTR_PWD']
+    ]){
+      stage('Build Docker image') {
+        container('builder') {
+          sh "cd /repo && git rev-parse HEAD > /home/jenkins/workspace/ee-build/commit-id"
+          def commit_id = readFile('commit-id').trim()
+          println commit_id
+
+          sh "cd /repo && \
+          export DOCKER_BUILDKIT=1 && \
+          docker -D build -t ${dtr_url}/${dtr_repo}:${commit_id} ."
+        }
+      }
+      stage('Push Docker image') {
+        container('builder') {
+          def commit_id = readFile('commit-id').trim()
+          sh "docker login -u ${DTR_USR} -p ${DTR_PWD} ${dtr_url} && \
+          docker push ${dtr_url}/${dtr_repo}:${commit_id} && \
+          docker rmi ${dtr_url}/${dtr_repo}:${commit_id}"
+        }
+      }
+    }
+  }
+}

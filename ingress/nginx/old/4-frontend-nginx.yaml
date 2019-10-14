@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ingress
+spec:
+  type: NodePort 
+  ports:
+  - port: 80
+    protocol: TCP
+    nodePort: 30080 ###
+    name: http
+  - port: 443
+    protocol: TCP
+    nodePort: 30443 ###
+    name: https
+  selector:
+    app: nginx-ingress
+---
+apiVersion: apps/v1 #extensions/v1
+kind: Deployment
+metadata:
+  name: nginx-ingress
+  namespace: nginx-ingress
+spec:
+  selector:
+    matchLabels:
+      app: nginx-ingress
+  template:
+    metadata:
+      annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: 500m
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
+        seccomp.security.alpha.kubernetes.io/pod: docker/default
+      labels:
+        app: nginx-ingress
+    spec:
+      serviceAccountName: nginx-ingress-sa
+      containers:
+      - image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.17.1 ## 0.25.1 ##
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: 10254
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: nginx-ingress
+        ports:
+        - name: http
+          containerPort: 80
+        - name: https
+          containerPort: 443
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        args:
+          - /nginx-ingress-controller
+          - --default-backend-service=$(POD_NAMESPACE)/default-http-backend
+          - --configmap=$(POD_NAMESPACE)/nginx-configuration
+          - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
+          - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
+          - --annotations-prefix=nginx.ingress.kubernetes.io
