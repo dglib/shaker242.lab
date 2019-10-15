@@ -11,7 +11,8 @@ K8s windows workers (172.16.1.31, 32 ,33) *reserved
 
 1. sshd-copy-id {all nodes}
 2. kubeadm config images pull {all managers}
-3. create kubeadm-config.yaml with the internal-lb of the master nodes and port:6443
+3. copy private ca.crt & ca.key to /etc/kubernetes/pki {all managers}
+4. create kubeadm-config.yaml with the internal-lb of the master nodes and port:6443
 ```
 apiVersion: kubeadm.k8s.io/v1beta2
 kind: ClusterConfiguration
@@ -23,7 +24,7 @@ networking:
   dnsDomain: "shaker242.lab"
 ```
 
-4. Initialized the install and let kubeadm manage cert uploads
+ 4a. Initialized the install and let kubeadm manage cert uploads
 ```
 sudo kubeadm init --config=kubeadm-config.yaml --upload-certs
 ```
@@ -37,15 +38,15 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
 5. follow instructions to join controllers/managers and worker nodes using kubeadm
-6. apply networking, this install I'm using Weave Net vs Calico
+6. apply networking, this install I'm using Weave Net
 ```
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
-..* note: for Calico the init phase (step 4) would include the cidr string "--pod-network-cidr=192.168.0.0/16"  
+..* note: for Calico the init phase (step 4a) would include the cidr string "--pod-network-cidr=192.168.0.0/16"  
 
 7. deploy the cluster wide metrics server
 ```
-kubectl create -f deploy/1.8+/
+kubectl create -f metrics-server/
 ```
 
 ## Optional - Deploy and access the Kubernetes Dashboard
