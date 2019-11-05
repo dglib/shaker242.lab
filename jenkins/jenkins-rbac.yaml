@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: jenkins-master
 rules:
-  - apiGroups: ["apps"]
+  - apiGroups: [""]
     resources: ["deployments"]
     verbs: ["get", "list", "watch", "create", "update", "patch"]
 ---
@@ -13,8 +13,7 @@ metadata:
   name: jenkins-master
 subjects:
   - kind: ServiceAccount
-    name: jenkins-master
-    # replace with namespace where provisioner is deployed
+    name: jenkins-service-account
     namespace: default
 roleRef:
   kind: Role

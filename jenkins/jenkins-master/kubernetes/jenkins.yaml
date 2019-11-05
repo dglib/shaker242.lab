@@ -23,7 +23,7 @@ spec:
        allowPrivilegeEscalation: false
      ports:
      - containerPort: 8080
-     - containerPort: 50000
+     - containerPort: 5000
      readinessProbe:
       # httpGet:
       #  path: /login

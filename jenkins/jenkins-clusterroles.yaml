@@ -10,7 +10,7 @@ rules:
     resources: ["pods"]
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
-    resources: ["pods"]
+    resources: ["secrets"]
     verbs: ["get", "list", "watch"]
   - apiGroups: [""]
     resources: ["jobs"]
@@ -23,7 +23,7 @@ metadata:
   name: run-jenkins-master
 subjects:
   - kind: ServiceAccount
-    name: jenkins-master
+    name: jenkins-service-account
     namespace: default
 roleRef:
   kind: ClusterRole
