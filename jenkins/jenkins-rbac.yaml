@@ -14,7 +14,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: jenkins-service-account
-    namespace: default
+    namespace: jenkins
 roleRef:
   kind: Role
   name: jenkins-master

@@ -24,7 +24,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: jenkins-service-account
-    namespace: default
+    namespace: jenkins
 roleRef:
   kind: ClusterRole
   name: jenkins-master-runner

@@ -18,7 +18,7 @@ spec:
    serviceAccountName: jenkins-service-account
    containers:
    - name: master
-     image: 'shaker242/jenkins:10.15'
+     image: 'shaker242/jenkins:11.05'
      securityContext:
        allowPrivilegeEscalation: false
      ports:
