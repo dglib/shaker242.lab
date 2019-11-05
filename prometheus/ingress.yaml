@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: prom-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: prom.apps.shaker242.lab
+    http:
+      paths:
+      - backend:
+          serviceName: prom-service
+          servicePort: 9090
