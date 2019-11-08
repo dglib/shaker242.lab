@@ -10,7 +10,6 @@
   shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
   args:
     warn: no
-  when: add_key|failed
 
 - name: Add Docker stable repository.
   apt_repository:

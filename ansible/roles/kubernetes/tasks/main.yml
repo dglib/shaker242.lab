@@ -9,7 +9,7 @@
     - kubelet
 
 - name: Install kubeadm & kubectl
-  hosts: kmaster[1:3]
+  #hosts: demo # masters 
   apt:
     pkg:
     - kubeadm

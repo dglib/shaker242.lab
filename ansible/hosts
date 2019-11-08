@@ -6,3 +6,9 @@ linux[1:4]
 
 [servers]
 kubenfs
+
+
+[demo]
+test
+
+

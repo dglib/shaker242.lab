@@ -1,7 +1,8 @@
-- hosts: all
+- hosts: demo
+  order: sorted
   gather_facts: yes
   become: yes
-  tasks:
+  roles:
     - common
     - docker
     - kubernetes
