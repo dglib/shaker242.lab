@@ -49,4 +49,10 @@
     value: '1'
     state: present 
 
+- name: Reboot
+  reboot:
+
+- name: Wait for system to become reachable
+  wait_for_connection:
+
 
