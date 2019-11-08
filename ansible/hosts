@@ -1,0 +1,8 @@
+[masters]
+kmaster[1:3]
+
+[workers]
+linux[1:4]
+
+[servers]
+kubenfs
