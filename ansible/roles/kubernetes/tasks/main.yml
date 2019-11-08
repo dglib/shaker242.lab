@@ -1,0 +1,52 @@
+- name: Add Kubernetes.io apt key
+  shell: "curl -sSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -"
+  args:
+    warn: no
+
+- name: Install a list of packages for kubernetes
+  apt:
+    pkg:
+    - kubelet
+
+- name: Install kubeadm & kubectl
+  hosts: kmaster[1:3]
+  apt:
+    pkg:
+    - kubeadm
+    - kubeclt
+
+- name: just force systemd to reread configs
+  systemd:
+    daemon_reload: yes
+
+- name: Make sure a kubelet is running
+  systemd:
+    state: started
+    name: kubelet
+
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- sysctl:
+    name: vm.swappiness
+    value: '0'
+    state: present
+
+- sysctl:
+    name: vm.overcommit_memory
+    value: '1'
+    state: present
+
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present 
+
+
