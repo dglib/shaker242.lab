@@ -49,6 +49,17 @@
     value: '1'
     state: present 
 
+- name: Copy CA Certificates  
+  copy:
+    src: /Users/shaker/Documents/certs/ca.shaker242.crt 
+    dest: /usr/local/share/ca-certificates/ca.shaker242.crt 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load CA Certificate 
+  shell: /usr/sbin/update-ca-certificates
+
 - name: Reboot
   reboot:
 
