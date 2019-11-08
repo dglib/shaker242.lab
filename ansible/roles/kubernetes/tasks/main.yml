@@ -3,6 +3,15 @@
   args:
     warn: no
 
+- name: Add Kubernetes stable repository.
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main 
+    state: present
+
+- name: Update for Kubernetes repo
+  apt:
+    update_cache: yes
+
 - name: Install a list of packages for kubernetes
   apt:
     pkg:
@@ -13,7 +22,7 @@
   apt:
     pkg:
     - kubeadm
-    - kubeclt
+    - kubectl
 
 - name: just force systemd to reread configs
   systemd:

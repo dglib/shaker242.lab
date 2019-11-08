@@ -6,15 +6,18 @@
   register: add_key
   ignore_errors: true
 
-- name: Add Docker apt key if failed
-  shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+- name: Add Docker apt key
+  shell: curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   args:
     warn: no
 
 - name: Add Docker stable repository.
   apt_repository:
-    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs)  stable"
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
     state: present
+
+- name: Update for Docker repo
+  apt:
     update_cache: yes
 
 - name: Install latest docker packages
