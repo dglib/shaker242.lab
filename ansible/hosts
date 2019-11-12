@@ -6,6 +6,7 @@ linux[1:4]
 
 [centos_workers]
 linux7
+linux8
 
 [servers]
 kubenfs
