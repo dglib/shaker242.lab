@@ -51,6 +51,11 @@
     enabled: yes
     name: docker
 
+- name: be sure firewalld is disabled
+  systemd: 
+    name: firewalld 
+    enabled: no
+
 - name: Download CTOP
   get_url:
     url: https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64
