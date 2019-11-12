@@ -45,10 +45,14 @@
   args:
     warn: no
 
-# update-ca-trust
-
 - name: Make sure a service is running
   systemd:
     state: started
     enabled: yes
     name: docker
+
+- name: Download CTOP
+  get_url:
+    url: https://github.com/bcicen/ctop/releases/download/v0.7.2/ctop-0.7.2-linux-amd64
+    dest: /usr/bin/ctop
+    mode: '0550'
