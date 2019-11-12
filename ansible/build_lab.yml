@@ -1,8 +1,24 @@
-- hosts: all
+- hosts: centos_workers
   order: sorted
   gather_facts: yes
   become: yes
   roles:
-    - common
-    #- docker
-    #- kubernetes
+    - centos
+    - centos_kube
+
+- hosts: ubuntu_workers
+  order: sorted
+  gather_facts: yes
+  become: yes
+  roles:
+    - ubuntu
+    - ubuntu_kube
+
+- hosts: masters
+  order: sorted
+  gather_facts: yes
+  become: yes
+  roles:
+    - ubuntu
+    - ubuntu_kube
+    - kube_master

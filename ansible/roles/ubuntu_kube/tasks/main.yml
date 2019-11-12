@@ -1,3 +1,5 @@
+---
+
 - name: Add Kubernetes.io apt key
   shell: "curl -sSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -"
   args:
@@ -16,13 +18,6 @@
   apt:
     pkg:
     - kubelet
-
-- name: Install kubeadm & kubectl
-  #hosts: demo # masters 
-  apt:
-    pkg:
-    - kubeadm
-    - kubectl
 
 - name: just force systemd to reread configs
   systemd:
@@ -58,7 +53,7 @@
     value: '1'
     state: present 
 
-- name: Copy CA Certificates  
+- name: Copy CA Certificates 
   copy:
     src: /Users/shaker/Documents/certs/ca.shaker242.crt 
     dest: /usr/local/share/ca-certificates/ca.shaker242.crt 
@@ -68,11 +63,4 @@
 
 - name: Load CA Certificate 
   shell: /usr/sbin/update-ca-certificates
-
-- name: Reboot
-  reboot:
-
-- name: Wait for system to become reachable
-  wait_for_connection:
-
 

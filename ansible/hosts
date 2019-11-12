@@ -1,14 +1,16 @@
 [masters]
 kmaster[1:3]
 
-[workers]
+[ubuntu_workers]
 linux[1:4]
+
+[centos_workers]
+linux7
 
 [servers]
 kubenfs
 
-
-[demo]
-test
+#[demo]
+#test
 
 

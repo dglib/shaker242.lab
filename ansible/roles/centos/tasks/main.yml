@@ -1,0 +1,54 @@
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: remove bundled docker packages
+  yum:
+    name:
+    - docker-client
+    - docker-client-latest
+    - docker-common
+    - docker-latest
+    - docker-latest-logrotate
+    - docker-logrotate
+    - docker-engine
+    state: absent
+
+- name: Install a list of packages
+  yum:
+    name:
+    - chrony
+    - nfs-utils
+    - ca-certificates
+    - open-vm-tools
+    - device-mapper-persistent-data
+    - curl
+    - yum-utils
+    - lvm2
+    state: present
+
+- name: Add repository
+  shell: yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Install docker-ce
+  yum:
+    name:
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    state: present
+    update_cache: yes
+
+- name: yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+
+# update-ca-trust
+
+- name: Make sure a service is running
+  systemd:
+    state: started
+    enabled: yes
+    name: docker

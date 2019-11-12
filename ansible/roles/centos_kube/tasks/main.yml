@@ -1,0 +1,69 @@
+---
+
+- name: Put SELinux in permissive mode.
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: Add Kubernetes repository
+  yum_repository:
+    name: kubernetes
+    gpgcheck: no
+    description: Kubernetes Repo 
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+
+- name: Install kubernetes packages
+  yum:
+    name:
+      - kubelet
+      - kubeadm
+    state: present
+    update_cache: yes
+
+- name: just force systemd to reread configs
+  systemd:
+    daemon_reload: yes
+
+- name: Make sure a kubelet is running
+  systemd:
+    state: started
+    enabled: yes
+    daemon_reload: yes
+    name: kubelet
+
+- name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+  shell: |
+    swapoff -a
+
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+  replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+
+- sysctl:
+    name: vm.swappiness
+    value: '0'
+    state: present
+
+- sysctl:
+    name: vm.overcommit_memory
+    value: '1'
+    state: present
+
+- sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    state: present 
+
+- name: Copy CA Certificates 
+  copy:
+    src: /Users/shaker/Documents/certs/ca.shaker242.crt 
+    dest: /etc/pki/ca-trust/source/anchors/ca.shaker242.crt 
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Load CA Certificate 
+  shell: /usr/bin/update-ca-trust
+
