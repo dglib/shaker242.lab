@@ -12,6 +12,6 @@ Using a USB key with the .iso burned to it, install rhvh on the internal SD Card
 ## Let's setup RHVH 4.3
 1. visit cockpit https://ip.of.your.host:9090
 2. register and enable repos via terminal 
-``` subscription-manager register --auto-attach ```
-``` subscription-manager repos --enable=rhel-7-server-rhvh-4-rpms ```
+  a. ``` subscription-manager register --auto-attach ```
+  b. ``` subscription-manager repos --enable=rhel-7-server-rhvh-4-rpms ```
 3. update host ``` yum update -y ```
