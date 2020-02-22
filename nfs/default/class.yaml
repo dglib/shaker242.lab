@@ -9,5 +9,5 @@ metadata:
     kubernetes.io/cluster-service: "true"
 provisioner: kubernetes.io/nfs
 parameters:
-  path: ${NFS_SHARE}
-  server: ${NFS_SERVER}
+  path: /nfs/default
+  server: 172.16.1.5

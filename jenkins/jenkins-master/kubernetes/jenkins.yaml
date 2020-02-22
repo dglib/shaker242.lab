@@ -12,13 +12,13 @@ spec:
   metadata:
    labels:
     app: jenkins-master
-   annotations:
-    seccomp.security.alpha.kubernetes.io/pod: docker/default
+  #  annotations:
+  #   seccomp.security.alpha.kubernetes.io/pod: docker/default
   spec:
    serviceAccountName: jenkins-service-account
    containers:
    - name: master
-     image: 'shaker242/jenkins:11.05'
+     image: shaker242/jenkins:43
      securityContext:
        allowPrivilegeEscalation: false
      ports:
@@ -35,10 +35,12 @@ spec:
      volumeMounts:
      - mountPath: /var/jenkins_home
        name: jenkins
-     - mountPath: /usr/bin/docker
-       name: docker
-     - mountPath: "/var/run/docker.sock"
-       name: docker-sock
+    #  - mountPath: /usr/bin/crio
+    #    name: crio
+    #  - mountPath: /usr/bin/kubectl
+    #    name: kubectl
+    #  - mountPath: /var/run/crio/crio.sock
+    #    name: crio-sock
      resources:
       limits:
        cpu: 500m
@@ -50,15 +52,18 @@ spec:
    - name: jenkins
      persistentVolumeClaim:
       claimName: jenkins-pvc
-   - name: docker
-     hostPath:
-      path: /usr/bin/docker
-      type: File
-   - name: docker-sock
-     hostPath:
-      path: /var/run/docker.sock
+  #  - name: kubectl
+  #    hostPath:
+  #     path: /usr/bin/kubectl
+  #     type: File
+  #  - name: crio
+  #    hostPath:
+  #     path: /usr/bin/crio
+  #     type: File
+  #  - name: crio-sock
+  #    hostPath:
+  #     path: /var/run/crio/crio.sock
       # type: Socket
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -71,4 +76,4 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: nfs
+  storageClassName: managed-nfs-storage

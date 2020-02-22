@@ -1,0 +1,10 @@
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: ceph-bucket
+  namespace: rook-ceph
+spec:
+  bucketName:
+  generateBucketName: quay-store
+  storageClassName: rook-ceph-bucket
+  additionalConfig:

@@ -55,4 +55,4 @@ spec:
          #- -enable-prometheus-metrics
          #- -enable-custom-resources
       nodeSelector: ###
-        role: ingress    
+        ingress: nginx    

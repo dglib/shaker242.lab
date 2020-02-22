@@ -247,14 +247,14 @@ spec:
             - --publish-service=$(POD_NAMESPACE)/ingress-nginx
             - --annotations-prefix=nginx.ingress.kubernetes.io
           securityContext:
-            allowPrivilegeEscalation: true
-            capabilities:
-              drop:
-                - ALL
-              add:
-                - NET_BIND_SERVICE
-            # www-data -> 33
-            runAsUser: 33
+            allowPrivilegeEscalation: false
+            # capabilities:
+            #   drop:
+            #     - ALL
+            #   add:
+            #     - NET_BIND_SERVICE
+            # # www-data -> 33
+            # runAsUser: 33
           env:
             - name: POD_NAME
               valueFrom:
@@ -289,4 +289,4 @@ spec:
             successThreshold: 1
             timeoutSeconds: 10
       nodeSelector: ###
-        role: ingress
+        ingress: nginx

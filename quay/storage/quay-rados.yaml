@@ -1,0 +1,14 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: QuayEcosystem
+metadata:
+  name: quayecosystem
+spec:
+  quay:
+    registryBackends:
+      - name: rados
+        rados:
+          hostname: linux3.shaker242.lab
+          # secure: 
+          accessKey: "214V3VMAU7YYHAQ4NEW6"
+          secretKey: "X1PXB8zkMkAeTs6aRT0lJO5VSPdKuc1Lso7EVhZd"
+          bucketName: "quay-store-8523b118-cbbf-4bf8-8ca1-d5c5c8188950"
