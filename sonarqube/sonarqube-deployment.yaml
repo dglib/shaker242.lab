@@ -19,13 +19,13 @@ spec:
     spec:
       containers:
       - name: sonarqube
-        env:
-        - name: SONARQUBE_JDBC_PASSWORD
-          value: EaDzBn4sdWiDfF
-        - name: SONARQUBE_JDBC_URL
-          value: jdbc:postgresql://postgresql/postgresdb
-        - name: SONARQUBE_JDBC_USERNAME
-          value: admin
+        # env:
+        # - name: SONARQUBE_JDBC_PASSWORD
+        #   value: EaDzBn4sdWiDfF
+        # - name: SONARQUBE_JDBC_URL
+        #   value: jdbc:postgresql://postgresql/postgresdb
+        # - name: SONARQUBE_JDBC_USERNAME
+        #   value: admin
         ports:
         - containerPort: 9000
           protocol: TCP 
@@ -57,9 +57,9 @@ spec:
           requests:
             memory: "2Gi"
             cpu: "1"
-        # envFrom:
-        #   - configMapRef:
-        #       name: sonarqube-env
+        envFrom:
+          - configMapRef:
+              name: sonarqube-env
         volumeMounts:
           - name: sonarqube-data
             mountPath: /opt/sonarqube/data
