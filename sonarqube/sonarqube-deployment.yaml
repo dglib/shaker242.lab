@@ -1,10 +1,14 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: sonarqube-dep
+  name: sonarqube
   namespace: sonarqube
+  labels:
+    app: sonarqube
 spec:
   replicas: 1
+  # selector: 
+  #   app: sonarqube
   strategy:
     type: Recreate
   template:
@@ -14,37 +18,55 @@ spec:
         tuned.openshift.io/elasticsearch: "true"
     spec:
       containers:
-        - name: sonarqube
-          image: sonarqube:community
-          readinessProbe:
-            tcpSocket:
-              port: 9000
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /about
-              port: 9000
-            initialDelaySeconds: 3
-            periodSeconds: 3
-          resources:
-            limits:
-              memory: "3Gi"
-              cpu: "2"
-            requests:
-              memory: "2Gi"
-              cpu: "1"
-          envFrom:
-            - configMapRef:
-                name: sonarqube-config
-          volumeMounts:
-            - name: sonarqube-data
-              mountPath: /opt/sonarqube/data
+      - name: sonarqube
+        env:
+        - name: SONARQUBE_JDBC_PASSWORD
+          value: EaDzBn4sdWiDfF
+        - name: SONARQUBE_JDBC_URL
+          value: jdbc:postgresql://postgresql/postgresdb
+        - name: SONARQUBE_JDBC_USERNAME
+          value: admin
+        ports:
+        - containerPort: 9000
+          protocol: TCP 
+        image: quay.io/gpte-devops-automation/sonarqube:7.9.1 #sonarqube:community
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /about
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /about
+            port: 9000
+            scheme: HTTP
+          initialDelaySeconds: 40
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            memory: "3Gi"
+            cpu: "2"
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+        # envFrom:
+        #   - configMapRef:
+        #       name: sonarqube-env
+        volumeMounts:
+          - name: sonarqube-data
+            mountPath: /opt/sonarqube/data
       volumes:
       - name: sonarqube-data
         persistentVolumeClaim:
           claimName: sonarqube-pvc
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
