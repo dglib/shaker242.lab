@@ -7,8 +7,6 @@ metadata:
     app: sonarqube
 spec:
   replicas: 1
-  # selector: 
-  #   app: sonarqube
   strategy:
     type: Recreate
   template:
@@ -23,6 +21,9 @@ spec:
         - containerPort: 9000
           protocol: TCP 
         image: quay.io/gpte-devops-automation/sonarqube:7.9.1 #sonarqube:community
+        envFrom:
+          - configMapRef:
+              name: sonarqube-env
         readinessProbe:
           failureThreshold: 3
           httpGet:
@@ -50,9 +51,6 @@ spec:
           requests:
             memory: "2Gi"
             cpu: "1"
-        envFrom:
-          - configMapRef:
-              name: sonarqube-env
         volumeMounts:
           - name: sonarqube-data
             mountPath: /opt/sonarqube/data
@@ -74,4 +72,21 @@ spec:
   resources:
     requests:
       storage: 5Gi
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sonarqube
+  name: sonarqube
+  namespace: sonarqube
+spec:
+  ports:
+  - port: 9000
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app: sonarqube
+    tuned.openshift.io/elasticsearch: "true"
+  sessionAffinity: None
+  type: ClusterIP

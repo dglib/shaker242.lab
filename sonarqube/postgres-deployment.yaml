@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: postgres-dep
+  name: postgresql
   namespace: sonarqube
 spec:
   replicas: 1
@@ -11,12 +11,12 @@ spec:
         app: postgres
     spec:
       containers:
-        - name: postgres
+        - name: postgresql
           image: postgres:9.6.17
-          # resources:
-          #   limits:
-          #     memory: "1Gi"
-          #     cpu: "500m"
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
           ports:
             - containerPort: 5432
           envFrom:
@@ -43,4 +43,20 @@ spec:
   resources:
     requests:
       storage: 5Gi
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: postgres
+  name: postgresql
+  namespace: sonarqube
+spec:
+  ports:
+  - port: 5432
+    protocol: TCP
+    targetPort: 5432
+  selector:
+    app: postgres
+  sessionAffinity: None
+  type: ClusterIP
