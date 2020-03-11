@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonarqube-config
+  labels:
+    app: sonarqube
+data:
+  SONARQUBE_JDBC_USERNAME: admin
+  SONARQUBE_JDBC_URL: jdbc:postgresql://postgressql/postgresdb
+  SONARQUBE_JDBC_PASSWORD: EaDzBn4sdWiDfF
+ 

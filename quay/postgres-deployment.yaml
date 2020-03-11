@@ -18,7 +18,7 @@ spec:
             - containerPort: 5432
           env:
           - name: POSTGRESQL_USER
-            value: "username"
+            value: "quay"
           - name: POSTGRESQL_DATABASE
             value: "quay"
           - name: POSTGRESQL_PASSWORD
