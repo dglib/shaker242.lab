@@ -41,6 +41,7 @@ spec:
 ```
 
 ### NFS Setup /etc/exports
+```
 #-----------------
 
 # You have accessed the NFS server for shaker242.lab
@@ -51,7 +52,6 @@ spec:
 
 #-----------------
 
-```
 # /etc/exports
 #
 # See exports(5) for a description.
