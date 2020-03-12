@@ -29,6 +29,7 @@ spec:
     targetPort: port-1
   tls:
     termination: edge
+    insecureEdgeTerminationPolicy: Redirect
   to:
     kind: Service
     name: jenkins-master

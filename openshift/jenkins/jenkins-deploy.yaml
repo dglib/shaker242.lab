@@ -1,17 +1,17 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    openshift.io/description: "Application Support Tool"
-    openshift.io/display-name: "Jenkins CICD"
-    openshift.io/requester: kube:admin
-    openshift.io/sa.scc.mcs: s0:c25,c15
-    openshift.io/sa.scc.supplemental-groups: 1000630000/10000
-    openshift.io/sa.scc.uid-range: 1000630000/10000
-  name: jenkins
-spec:
-  finalizers:
-  - kubernetes
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   annotations:
+#     openshift.io/description: "Application Support Tool"
+#     openshift.io/display-name: "Jenkins CICD"
+#     openshift.io/requester: kube:admin
+#     openshift.io/sa.scc.mcs: s0:c25,c15
+#     openshift.io/sa.scc.supplemental-groups: 1000630000/10000
+#     openshift.io/sa.scc.uid-range: 1000630000/10000
+#   name: jenkins
+# spec:
+#   finalizers:
+#   - kubernetes
 ---
 apiVersion: apps/v1
 kind: Deployment
