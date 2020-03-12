@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-master
+  namespace: jenkins
+spec:
+  ports:
+  - name: port-1
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  - name: port-2
+    port: 5000
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: jenkins-master
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: jenkins-master
+  namespace: jenkins
+spec:
+  host: jenkins.shaker242.lab
+  port:
+    targetPort: port-1
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: jenkins-master
+    weight: 100
