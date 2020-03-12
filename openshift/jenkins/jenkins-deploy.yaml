@@ -30,7 +30,7 @@ spec:
       labels:
         app: jenkins-master
     spec:
-      serviceAccountName: jenkins-service-account
+      # serviceAccountName: jenkins-service-account
       containers:
       - env:
         - name: OPENSHIFT_ENABLE_OAUTH
