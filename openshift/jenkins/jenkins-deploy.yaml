@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: "Application Support Tool"
+    openshift.io/display-name: "Jenkins CICD"
+    openshift.io/requester: kube:admin
+    openshift.io/sa.scc.mcs: s0:c25,c15
+    openshift.io/sa.scc.supplemental-groups: 1000630000/10000
+    openshift.io/sa.scc.uid-range: 1000630000/10000
+  name: jenkins
+spec:
+  finalizers:
+  - kubernetes
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-master
+  namespace: jenkins
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jenkins-master
+  template:
+    metadata:
+      labels:
+        app: jenkins-master
+    spec:
+      serviceAccountName: jenkins-service-account
+      containers:
+      - env:
+        - name: OPENSHIFT_ENABLE_OAUTH
+          value: "true"
+        - name: OPENSHIFT_ENABLE_REDIRECT_PROMPT
+          value: "true"
+        - name: DISABLE_ADMINISTRATIVE_MONITORS
+          value: "true"
+        - name: KUBERNETES_MASTER
+          value: https://kubernetes.default:443
+        - name: KUBERNETES_TRUST_CERTIFICATES
+          value: "true"
+        - name: JENKINS_SERVICE_NAME
+          value: jenkins
+        - name: JNLP_SERVICE_NAME
+          value: jenkins-jnlp
+        - name: ENABLE_FATAL_ERROR_LOG_FILE
+          value: "false"
+        - name: JENKINS_UC_INSECURE
+          value: "false"
+        name: master
+        image: jenkins/jenkins:alpine
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 420
+          periodSeconds: 360
+          successThreshold: 1
+          timeoutSeconds: 240
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /login
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+        resources:
+          limits:
+            memory: 2Gi
+        securityContext:
+          capabilities: {}
+          privileged: false
+        ports:
+        - containerPort: 8080
+        - containerPort: 5000
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins
+      volumes:
+      - name: jenkins
+        persistentVolumeClaim:
+          claimName: jenkins-pvc
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jenkins-pvc
+  namespace: jenkins
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: managed-nfs-storage
