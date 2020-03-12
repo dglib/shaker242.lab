@@ -59,8 +59,8 @@ spec:
 # use exportfs -arv to reread
 #/export    192.168.1.10(rw,no_root_squash)
 
-/nfs/autonfs *(rw,sync,no_subtree_check,no_root_squash)
-/nfs/default *(rw,sync,no_subtree_check,all_squash,anonuid=65534,anongid=65534)
+/nfs/autonfs *(rw,sync,no_subtree_check,no_root_squash)  << Dynamic Provisioning >>
+/nfs/default *(rw,sync,no_subtree_check,all_squash,anonuid=65534,anongid=65534) << Manual Provisioning >>
 ```
 
 
