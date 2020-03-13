@@ -2,7 +2,7 @@
 # kind: Namespace
 # metadata:
 #   annotations:
-#     openshift.io/description: "Application Support Tool"
+#     openshift.io/description: "Software Pipeline"
 #     openshift.io/display-name: "Jenkins CICD"
 #     openshift.io/requester: kube:admin
 #     openshift.io/sa.scc.mcs: s0:c25,c15
@@ -30,7 +30,7 @@ spec:
       labels:
         app: jenkins-master
     spec:
-      # serviceAccountName: jenkins-service-account
+      serviceAccountName: jenkins
       containers:
       - env:
         - name: OPENSHIFT_ENABLE_OAUTH
