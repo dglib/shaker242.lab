@@ -51,8 +51,8 @@ spec:
           value: "false"
         - name: JENKINS_UC_INSECURE
           value: "false"
-        name: master
-        image: jenkins/jenkins:alpine
+        name: jenkins-master
+        image: jenkins/jenkins:lts
         livenessProbe:
           failureThreshold: 2
           httpGet:
@@ -102,3 +102,9 @@ spec:
     requests:
       storage: 5Gi
   storageClassName: managed-nfs-storage
+
+
+
+  # jenkins.apps.kubernetes.shaker242.lab
+  # jenkins.apps.kubernetes.shaker242.lab:5000/jenkins/jenkins-agent-appdev
+
