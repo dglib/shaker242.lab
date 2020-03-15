@@ -1,0 +1,19 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  annotations:
+    openshift.io/generated-by: OpenShiftNewBuild
+  creationTimestamp: "2020-03-14T03:27:41Z"
+  generation: 1
+  labels:
+    build: jenkins-agent-appdev
+  name: jenkins-agent-appdev
+  namespace: jenkins
+  resourceVersion: "11932769"
+  selfLink: /apis/image.openshift.io/v1/namespaces/jenkins/imagestreams/jenkins-agent-appdev
+  uid: ed2f0bef-2cb0-450a-825d-0c7cdd630b0c
+spec:
+  lookupPolicy:
+    local: false
+status:
+  dockerImageRepository: image-registry.openshift-image-registry.svc:5000/jenkins/jenkins-agent-appdev

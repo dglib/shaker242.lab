@@ -2,14 +2,12 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace":
-      "", "kind": "Service"}]'
     service.openshift.io/infrastructure: "true"
-  name: jenkins
+  name: jenkins-master
   namespace: jenkins
 spec:
   ports:
-  - name: web
+  - name: master-ui
     port: 8080
     protocol: TCP
     targetPort: 8080
@@ -21,6 +19,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  annotations:
+    service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace":
+      "", "kind": "Service"}]'
   name: jenkins-jnlp
   namespace: jenkins
 spec:
@@ -39,11 +40,11 @@ metadata:
 spec:
   host: jenkins.shaker242.lab
   port:
-    targetPort: web
+    targetPort: master-ui
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
   to:
     kind: Service
-    name: jenkins
+    name: jenkins-master
     weight: 100

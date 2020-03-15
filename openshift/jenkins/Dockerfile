@@ -1,3 +1,5 @@
+# docker sidecar
+
 FROM centos
 USER root
 RUN yum update -y \

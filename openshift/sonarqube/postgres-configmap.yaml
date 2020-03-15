@@ -6,6 +6,6 @@ metadata:
     app: postgres
 data:
   POSTGRES_DB: postgresdb
-  POSTGRES_USER: admin
-  POSTGRES_PASSWORD: EaDzBn4sdWiDfF
+  POSTGRES_USER: sonar
+  POSTGRES_PASSWORD: sonar
   VOLUME_CAPACITY: 5Gi
