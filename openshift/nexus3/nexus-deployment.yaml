@@ -11,7 +11,7 @@
 # spec:
 #   finalizers:
 #   - kubernetes
----
+# ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,17 +39,17 @@ spec:
             requests:
               memory: "1Gi"
               cpu: "500m"
-          # readinessProbe:
-          #   tcpSocket:
-          #     port: 8080
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: 8080
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 20
-          #   periodSeconds: 3
+          readinessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            periodSeconds: 3
           ports:
             - containerPort: 8081
           volumeMounts:

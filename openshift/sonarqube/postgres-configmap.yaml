@@ -8,4 +8,4 @@ data:
   POSTGRES_DB: postgresdb
   POSTGRES_USER: sonar
   POSTGRES_PASSWORD: sonar
-  VOLUME_CAPACITY: 5Gi
+  # VOLUME_CAPACITY: 5Gi

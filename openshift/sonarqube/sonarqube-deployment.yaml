@@ -68,7 +68,7 @@ metadata:
   name: sonarqube-pvc
   namespace: sonarqube
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-class: "auto-nfs"
 spec:
   accessModes:
     - ReadWriteMany

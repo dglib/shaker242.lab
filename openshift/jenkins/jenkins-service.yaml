@@ -1,50 +1,25 @@
 apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    service.openshift.io/infrastructure: "true"
-  name: jenkins-master
-  namespace: jenkins
-spec:
-  ports:
-  - name: master-ui
-    port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    name: jenkins
-  sessionAffinity: None
-  type: ClusterIP
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    service.alpha.openshift.io/dependencies: '[{"name": "jenkins-jnlp", "namespace":
-      "", "kind": "Service"}]'
-  name: jenkins-jnlp
-  namespace: jenkins
-spec:
-  ports:
-  - name: agent
-    port: 50000
-    protocol: TCP
-    targetPort: 50000
-  type: ClusterIP 
----
-apiVersion: route.openshift.io/v1
-kind: Route
-metadata:
-  name: jenkins-master
-  namespace: jenkins
-spec:
-  host: jenkins.shaker242.lab
-  port:
-    targetPort: master-ui
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Redirect
-  to:
-    kind: Service
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
     name: jenkins-master
-    weight: 100
+    namespace: jenkins
+  spec:
+    ports:
+    - name: port-1
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: port-2
+      port: 5000
+      protocol: TCP
+      targetPort: 5000
+    selector:
+      app: jenkins-master
+    sessionAffinity: None
+    type: ClusterIP
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: postgresql
   namespace: sonarqube
+  annotations: 
+    openshift.io/scc: anyuid
 spec:
   replicas: 1
   selector:
@@ -28,6 +30,8 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
+          securityContext:
+            runAsUser: postgres
       volumes:
       - name: postgres-data
         persistentVolumeClaim:
@@ -39,10 +43,10 @@ metadata:
   name: postgres-pvc
   namespace: sonarqube
   annotations:
-    volume.beta.kubernetes.io/storage-class: "managed-nfs-storage"
+    volume.beta.kubernetes.io/storage-class: "auto-nfs"
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 5Gi

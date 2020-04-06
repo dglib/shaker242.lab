@@ -29,8 +29,7 @@ spec:
 # apiVersion: v1
 # url: ldap://ldap.shaker242.lab:389
 # bindDN: uid=ocp-service-account,cn=users,cn=accounts,dc=shaker242,dc=lab
-# bindPassword:
-#   name: ldap-secret
+# bindPassword: J5rdfv5e4!
 # insecure: false
 # rfc2307:
 #     groupsQuery:
