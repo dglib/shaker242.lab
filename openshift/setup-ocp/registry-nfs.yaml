@@ -1,22 +1,24 @@
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: image-registry-pv
-# spec:
-#   accessModes:
-#     - ReadWriteMany
-#   capacity:
-#     storage: 100Gi
-#   nfs:
-#     path: /registry
-#     server: 172.16.1.120
-#   persistentVolumeReclaimPolicy: Retain
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: image-registry-pv
+  namespace: openshift-image-registry
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 100Gi
+  nfs:
+    path: /registry
+    server: 172.16.1.5
+  persistentVolumeReclaimPolicy: Retain
 
 ---
 apiVersion: "v1"
 kind: "PersistentVolumeClaim"
 metadata:
   name: "image-registry-storage"
+  namespace: openshift-image-registry
 spec:
   accessModes:
     - ReadWriteMany
@@ -33,9 +35,6 @@ spec:
 #
 # storage:
 #   pvc:
-#     claim: 
+#     claim: image-registry-storage
 #
-# /registry *(rw,sync,no_wdelay,no_root_squash,insecure,fsid=0)
-#
-
-
+# /registry *(rw,sync,no_wdelay,no_root_squash,insecure)

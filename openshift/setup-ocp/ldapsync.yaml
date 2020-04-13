@@ -1,0 +1,26 @@
+kind: LDAPSyncConfig
+apiVersion: v1
+url: "ldaps://idm.redhat.lan:636"
+bindDN: "uid=ocp-sa,cn=users,cn=accounts,dc=redhat,dc=lan"
+bindPassword:
+  name: ldap-bind-password
+ca:
+  name: ldap-tls-ca
+insecure: false
+rfc2307:
+  groupsQuery:
+    baseDN: "cn=groups,cn=accounts,dc=redhat,dc=lan"
+    scope: sub
+    derefAliases: never
+    filter: (!(objectClass=mepManagedEntry))
+    pageSize: 0
+    timeout: 0
+  groupUIDAttribute: dn
+  groupNameAttributes: [ cn ]
+  groupMembershipAttributes: [ member ]
+  usersQuery:
+    baseDN: "cn=users,cn=accounts,dc=redhat,dc=lan"
+    scope: sub
+    derefAliases: never
+  userUIDAttribute: dn
+  userNameAttributes: [ uid ]
