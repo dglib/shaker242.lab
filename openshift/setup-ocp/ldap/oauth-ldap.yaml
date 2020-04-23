@@ -1,0 +1,27 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: IdM RedCloud
+    mappingMethod: claim
+    type: LDAP
+    ldap:
+      attributes:
+        id:
+        - dn
+        email:
+        - mail
+        name:
+        - cn
+        preferredUsername:
+        - uid
+      bindDN: "uid=admin,cn=users,cn=accounts,dc=redcloud,dc=land"
+      bindPassword:
+        name: idm-bind-password
+      insecure: false
+      ca:
+        name: idm-tls-ca
+      # url: "ldaps://idm.redcloud.land:636/cn=users,cn=accounts,dc=redcloud,dc=land?uid?sub?(memberOf=cn=ocp-users,cn=groups,cn=accounts,dc=redcloud,dc=land)"
+      url: "ldaps://idm.redcloud.land:636/cn=users,cn=accounts,dc=redcloud,dc=land?uid"

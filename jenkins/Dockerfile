@@ -1,13 +1,8 @@
-FROM centos
+FROM jenkins/jenkins:lts
 USER root
-RUN yum update -y \
-	&& yum upgrade -y \
-	&& yum install -y yum-utils \
-	&& yum-config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-RUN yum update -y \
-	&& yum install -y docker-ce docker-ce-cli containerd.io --nobest \
-	&& yum clean all
-RUN useradd jenkins
-RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers 
-USER jenkins
-ENTRYPOINT dockerd
+RUN apt-get update \
+	&& apt-get upgrade -y \
+	&& apt-get install -y ca-certificates sudo libltdl-dev ldap-client
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+COPY ca-redcloud.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates

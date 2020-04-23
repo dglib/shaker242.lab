@@ -1,0 +1,45 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: QuayEcosystem
+metadata:
+  name: quay-ecosystem
+spec:
+  quay:
+    keepConfigDeployment: true
+    # external hostname, in dns and tls
+    hostname: quay.redcloud.land
+    # external mapping for the configuration page - here we'll setup LDAP and deselect Docker V1 support to allow it
+    configHostname: quayconfig.apps.openshift.redcloud.land
+    imagePullSecretName: redhat-pull-secret
+    # stored hostname tls cert/key
+    sslCertificatesSecretName: custom-quay-ssl
+    resources:
+      requests:
+        memory: 512Mi
+    livenessProbe:
+      initialDelaySeconds: 120
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+    readinessProbe:
+      initialDelaySeconds: 10
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+    database:
+      volumeSize: 10Gi
+    registryStorage:
+      persistentVolumeStorageClassName: auto-nfs
+      persistentVolumeAccessModes:
+        - ReadWriteOnce
+      persistentVolumeSize: 10Gi
+    configFiles:
+      # stored private CA cert
+      - secretName: quayconfigfile
+        type: extraCaCert
+  clair:
+    # enable clair support
+    enabled: true
+    imagePullSecretName: redhat-pull-secret
+    updateInterval: "30m"

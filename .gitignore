@@ -1,3 +1,5 @@
 /openshift/setup-ocp/my-install-config.yaml
 /openshift/demo-scripts
 /openshift/nexus3/openshift-tasks
+redhat-pull-secret.yaml
+htpasswd

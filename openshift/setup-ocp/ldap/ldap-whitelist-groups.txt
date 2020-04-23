@@ -1,0 +1,4 @@
+cn=ocp-admins,cn=groups,cn=accounts,dc=redcloud,dc=land
+cn=ocp-users,cn=groups,cn=accounts,dc=redcloud,dc=land
+cn=ocp-developers,cn=groups,cn=accounts,dc=redcloud,dc=land
+cn=ocp-production,cn=groups,cn=accounts,dc=redcloud,dc=land
