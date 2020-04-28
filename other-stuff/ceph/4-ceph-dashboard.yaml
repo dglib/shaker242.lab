@@ -16,4 +16,4 @@ spec:
     app: rook-ceph-mgr
     rook_cluster: rook-ceph
   sessionAffinity: None
-  type: NodePort
+  #type: NodePort

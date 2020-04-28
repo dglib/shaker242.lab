@@ -1,0 +1,55 @@
+apiVersion: redhatcop.redhat.io/v1alpha1
+kind: QuayEcosystem
+metadata:
+  name: quay-ecosystem
+spec:
+  quay:
+    # Testing with Rook-Ceph / S3
+    registryBackends:
+      - name: rados
+        s3:
+          accessKey: "6DQM62DDF141NEXL7D2T"
+          bucketName: quaystore
+          secretKey: "PNVzlGDIrmtce7Ab0nyRd4ZPRbflU0ey4Vr1MngR"
+          hostname: rook-ceph-rgw-obj-store.rook-ceph.svc
+          port: 8080
+          storage_path: /datastorage/registry
+    keepConfigDeployment: true
+    # external hostname, in dns and tls
+    hostname: quay.redcloud.land
+    # external mapping for the configuration page - here we'll setup LDAP and deselect Docker V1 support to allow it
+    configHostname: quayconfig.apps.openshift.redcloud.land
+    imagePullSecretName: redhat-pull-secret
+    # stored hostname tls cert/key
+    sslCertificatesSecretName: custom-quay-ssl
+    resources:
+      requests:
+        memory: 512Mi
+    livenessProbe:
+      initialDelaySeconds: 120
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+    readinessProbe:
+      initialDelaySeconds: 10
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+    database:
+      volumeSize: 10Gi
+    # registryStorage:
+    #   persistentVolumeStorageClassName: rook-ceph-bucket
+    #   persistentVolumeAccessModes:
+    #     - ReadWriteOnce
+    #   persistentVolumeSize: 10Gi
+    configFiles:
+      # stored private CA cert
+      - secretName: quayconfigfile
+        type: extraCaCert
+  clair:
+    # enable clair support
+    enabled: true
+    imagePullSecretName: redhat-pull-secret
+    updateInterval: "30m"

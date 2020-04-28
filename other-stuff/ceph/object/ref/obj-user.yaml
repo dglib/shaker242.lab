@@ -1,8 +1,8 @@
 apiVersion: ceph.rook.io/v1
 kind: CephObjectStoreUser
 metadata:
-  name: shaker
+  name: admin
   namespace: rook-ceph
 spec:
-  store: my-store
+  store: obj-store
   displayName: "Shaker"

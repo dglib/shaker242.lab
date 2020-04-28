@@ -5,6 +5,6 @@ metadata:
   namespace: rook-ceph
 spec:
   bucketName:
-  generateBucketName: nexus-store
+  generateBucketName: ceph-store
   storageClassName: rook-ceph-bucket
   additionalConfig:
