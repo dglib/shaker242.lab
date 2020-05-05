@@ -8,17 +8,23 @@
 
    _check with ```fdisk /dev/sdX``` "F"_
 
-3. Create the namespace: \
+3. Label the nodes for OCS: \
+```oc label nodes linux0 linux1 linux2 cluster.ocs.openshift.io/openshift-storage=''```
+
+4. Create the namespace: \
 ```oc create -f ocs-namespace.yaml```
 
-4. Install the Operators: \
+5. Install the Operators: \
 ```oc create -f ocs-operator.yaml -f localstorage-operator.yaml```
 
-5. Install the localstorage classes for mon & osd: \
+6. Install the localstorage classes for mon & osd: \
 ```oc create -f localstorage-ocs-mon.yaml -f localstorage-ocs-osd.yaml```
 
-6. Install OCS \
+7. Install OCS \
 ```oc create -f storagecluster.yaml```
+
+8. Enable the toolbox \
+```oc patch OCSInitialization ocsinit -n openshift-storage --type json --patch  '[{ "op": "replace", "path": "/spec/enableCephTools", "value": true }]'```
 
 
 ## Clean volumes if you have to... 
