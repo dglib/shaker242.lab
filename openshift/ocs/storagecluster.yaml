@@ -15,7 +15,7 @@ spec:
           storage: 10Gi
   storageDeviceSets:
   - name: deviceset
-    count: 4
+    count: 3
     resources: {}
     placement: {}
     dataPVCTemplate:
@@ -26,5 +26,5 @@ spec:
         volumeMode: Block
         resources:
           requests:
-            storage: 400Gi
+            storage: 100Gi 
     portable: true

@@ -1,3 +1,5 @@
+#oc new-project openshift-cluster-ops
+
 oc --user=admin process --local \
   -f openshift-management/jobs/cronjob-ldap-group-sync-secure.yml \
   -p NAMESPACE='openshift-cluster-ops' \
