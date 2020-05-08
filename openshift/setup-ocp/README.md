@@ -10,17 +10,19 @@
 3. Patch the API server with the new secret/api-bundle. \
 ``` oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates":[{"names": ["api.openshift.redcloud.land"],"servingCertificate": {"name": "api-redcloud-bundle"}}]}}}' ```
 
+*You'll lose access with the .kube/config file; replace the data field "certificate-authority-data" with a base64 hash of your ca-bundle.crt below.
+
   ## Update the default ingress certificate
 
 4. Create a ConfigMap that includes the certificate authority used to signed the new certificate: \
-``` cat intermediate.crt ca.crt > ca-bundle.crt ```
-```oc create configmap custom-ca --from-file=ca-bundle.crt=ca-bundle.crt -n openshift-config```
+``` cat intermediate.crt ca.crt > ca-bundle.crt ``` \
+``` oc create configmap custom-ca --from-file=ca-bundle.crt=ca-bundle.crt -n openshift-config ```
 
 5. Update the cluster-wide proxy configuration with the newly created ConfigMap: \
 ```oc patch proxy/cluster --type=merge --patch='{"spec":{"trustedCA":{"name":"custom-ca"}}}'```
 
 6. Create a secret that contains the wildcard certificate and key: \
-```oc create secret tls wildcard  --cert=_.apps.openshift.redcloud.land.crt --key=_.apps.openshift.redcloud.land.key -n openshift-ingress```
+```oc create secret tls wildcard  --cert=apps.openshift.redcloud.land.crt --key=apps.openshift.redcloud.land.key -n openshift-ingress```
 
 7. Update the Ingress Controller configuration with the newly created secret: \
 ```oc patch ingresscontroller.operator default --type=merge -p  '{"spec":{"defaultCertificate": {"name": "wildcard"}}}'  -n openshift-ingress-operator```
