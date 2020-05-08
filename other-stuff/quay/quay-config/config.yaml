@@ -8,13 +8,13 @@ DB_URI: postgresql://quay:quay@quay-ecosystem-quay-postgresql/quay
 DEFAULT_TAG_EXPIRATION: 2w
 DISTRIBUTED_STORAGE_CONFIG:
   default:
-  - RadosGWStorage
-  - access_key: 6DQM62DDF141NEXL7D2T
-    bucket_name: s3-quay
-    hostname: rook-ceph-rgw-obj-store.rook-ceph.svc
-    is_secure: false
-    port: '8080'
-    secret_key: PNVzlGDIrmtce7Ab0nyRd4ZPRbflU0ey4Vr1MngR
+  - RHOCSStorage
+  - access_key: 'pR0VhIzWRjUUsyUCWKoK'
+    bucket_name: quaybucket
+    hostname: s3.openshift-storage.svc
+    is_secure: true
+    port: '443'
+    secret_key: 'UkdFuCJ1G/QMhiNaMleF7y93bX8w2a4hdK2CpqGQ'
     storage_path: /datastorage/registry
 DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 DISTRIBUTED_STORAGE_PREFERENCE:

@@ -4,17 +4,28 @@ metadata:
   name: quay-ecosystem
 spec:
   quay:
+    # OpenShift Container Storage - NOOBAA/S3 
+    # See: https://access.redhat.com/solutions/4893721 for resolution
+    # registryBackends:
+    #   - name: rhocs
+    #     rhocs:
+    #       accessKey: rRVYOTpBqZ1W9cXBTOWd
+    #       bucketName: quaystore
+    #       secretKey: ztOia2nmwFxvllAS4dnclBTFIoTeXaR6lGdPu7qF
+    #       hostname: s3.openshift-storage.svc
+    #       storage_path: /datastorage/registry
+    #       secure: true
+    #       port: 443
     keepConfigDeployment: true
     # external hostname, in dns and tls
     hostname: quay.redcloud.land
     # external mapping for the configuration page - here we'll setup LDAP and deselect Docker V1 support to allow it
     configHostname: quayconfig.apps.openshift.redcloud.land
     imagePullSecretName: redhat-pull-secret
-    # stored hostname tls cert/key
     sslCertificatesSecretName: custom-quay-ssl
     resources:
       requests:
-        memory: 512Mi
+        memory: 1000Mi
     livenessProbe:
       initialDelaySeconds: 120
       httpGet:
@@ -29,17 +40,12 @@ spec:
         scheme: HTTPS
     database:
       volumeSize: 10Gi
-    registryStorage:
-      persistentVolumeStorageClassName: auto-nfs
-      persistentVolumeAccessModes:
-        - ReadWriteOnce
-      persistentVolumeSize: 10Gi
     configFiles:
-      # stored private CA cert
-      - secretName: quayconfigfile
-        type: extraCaCert
+      - secretName: ca-redcloud
+        files:
+         - key: ca.crt
+           type: extraCaCert
   clair:
-    # enable clair support
     enabled: true
     imagePullSecretName: redhat-pull-secret
     updateInterval: "30m"
