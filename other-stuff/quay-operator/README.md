@@ -4,7 +4,7 @@
 
 
 Ref: \
-https://github.com/redhat-cop/quay-operator/issues/137
+https://github.com/redhat-cop/quay-operator/issues/137 \
 https://access.redhat.com/solutions/4893721
 
 
