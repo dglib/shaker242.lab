@@ -19,7 +19,7 @@ In this guide, I'll setup Quay & Clair with self-signed certificates (CA).
 
 ---
 ### PreReqs
-* An OpenShift 3.x or 4.x cluster
+* An OpenShift 4.x cluster
 * Cluster-scope admin privilege to the OpenShift cluster
 * Create a namespace for the Operator \
 ```$ oc create ns quay-enterprise```
