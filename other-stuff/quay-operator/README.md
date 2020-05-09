@@ -1,5 +1,11 @@
-# Dont use this installation method, installing Quay with OCS (noobaa/s3) as operators doesn't work.
+## Installing Quay 3.2 with OCS 4.3 (noobaa/s3) on OCP 4.3 doesn't work.
 
+## Do not use this installation method; it's still here for reference after spending 4 days troubleshooting. Know issues; included in the ref links, were attempted to resolve the ssl issues, but were unsuccessful. 
+
+
+Ref: \
+https://github.com/redhat-cop/quay-operator/issues/137
+https://access.redhat.com/solutions/4893721
 
 
 # Deploy Red Hat Quay on OpenShift with Quay Setup Operator
