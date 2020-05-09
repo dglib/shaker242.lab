@@ -1,3 +1,7 @@
+# Dont use this installation method, installing Quay with OCS (noobaa/s3) as operators doesn't work.
+
+
+
 # Deploy Red Hat Quay on OpenShift with Quay Setup Operator
 
 Red Hat Quay 3.2
