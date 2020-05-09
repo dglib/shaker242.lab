@@ -39,7 +39,7 @@ Install the Operator itself, via the UI, navigate to Operators > Operator Hub > 
 
 Once the packages have been installed, visit "Installed Operators" and choose "Quay", if you don't see it; make sure that you have selected the project quay-enterprise or "all projects". Choose ```+Create Instance``` and replace the yaml file presented with your modified verison of ```quay-ecosystem.yaml``` (included for reference).
 
-## *SSL error when deploying Quay with a RHOCS storage backend - fix.*
+## *SSL error when deploying Quay with a RHOCS storage backend - (possible) fix.*
 >> See: https://access.redhat.com/solutions/4893721 for resolution
 
 1. Deploy the QuayEcosystem without any storage configuration and make sure to include the custom CA certificate.
