@@ -60,27 +60,30 @@
 16. Create the openshift-cluster-ops project for group sync resources: \
 ```oc adm new-project openshift-cluster-ops```
 
-17. Create a cluster role binding to grant sudoer rights to members of the ocp-production group: \
+17. Cronjob the ldap sync: \
+``` sh cronjob.sh ```
+
+18. Create a cluster role binding to grant sudoer rights to members of the ocp-production group: \
 ```oc adm policy add-cluster-role-to-group sudoer ocp-production```
 
-18. Restrict ocp-developers from creating projects: \
+19. Restrict ocp-developers from creating projects: \
 ```oc annotate clusterrolebinding self-provisioners --overwrite 'rbac.authorization.kubernetes.io/autoupdate=false'``` \
 ```oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth``` \
 ```oc patch projects.config.openshift.io cluster --type=merge -p "$(cat ocp-dev-message.json)"```
 
-19. Allow Production Administrators to Create Projects: \
+20. Allow Production Administrators to Create Projects: \
 ```oc adm policy add-cluster-role-to-group self-provisioner ocp-production```
 
-20. Remove kubeadmin: \
+21. Remove kubeadmin: \
 ```oc delete secrets kubeadmin -n kube-system```
 
 
   ## Set up the registry
 
-1. Create the PV/PVC Manually: \
+22. Create the PV/PVC Manually: \
 ```oc create -f registry-nfs.yaml```
 
-2. Edit the operator: \
+23. Edit the operator: \
 ```oc edit configs.imageregistry.operator.openshift.io``` 
 
 ```

@@ -4,18 +4,6 @@ metadata:
   name: quay-ecosystem
 spec:
   quay:
-    # OpenShift Container Storage - NOOBAA/S3 
-    # See: https://access.redhat.com/solutions/4893721 for resolution
-    # registryBackends:
-    #   - name: rhocs
-    #     rhocs:
-    #       accessKey: rRVYOTpBqZ1W9cXBTOWd
-    #       bucketName: quaystore
-    #       secretKey: ztOia2nmwFxvllAS4dnclBTFIoTeXaR6lGdPu7qF
-    #       hostname: s3.openshift-storage.svc
-    #       storage_path: /datastorage/registry
-    #       secure: true
-    #       port: 443
     keepConfigDeployment: true
     # external hostname, in dns and tls
     hostname: quay.redcloud.land
@@ -26,25 +14,23 @@ spec:
     resources:
       requests:
         memory: 1000Mi
-    livenessProbe:
-      initialDelaySeconds: 120
-      httpGet:
-        path: /health/instance
-        port: 8443
-        scheme: HTTPS
-    readinessProbe:
-      initialDelaySeconds: 10
-      httpGet:
-        path: /health/instance
-        port: 8443
-        scheme: HTTPS
+    # livenessProbe:
+    #   initialDelaySeconds: 120
+    #   httpGet:
+    #     path: /health/instance
+    #     port: 8443
+    #     scheme: HTTPS
+    # readinessProbe:
+    #   initialDelaySeconds: 10
+    #   httpGet:
+    #     path: /health/instance
+    #     port: 8443
+    #     scheme: HTTPS
     database:
       volumeSize: 10Gi
     configFiles:
       - secretName: ca-redcloud
-        files:
-         - key: ca.crt
-           type: extraCaCert
+        type: extraCaCert
   clair:
     enabled: true
     imagePullSecretName: redhat-pull-secret

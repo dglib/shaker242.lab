@@ -66,7 +66,7 @@ DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 
 5. Because I'm using a private CA, I have to modify Clair to use the correct ```ca.crt```. Here I will patch the deployment to use the CA located in ca-redcloud which we created earlier. 
 
-``` oc -n quay-enterprise patch deployment.apps/quay-ecosystem-clair -p '{"spec":{"template":{"spec":{"volumes":[{"name":"quay-ssl","secret":{"secretName":"ca-redcloud","items":[{"key":"ca.crt","path":"ca.crt"}]}}]}}}}' ```
+``` oc -n quay-enterprise patch deployment.apps/quay-ecosystem-clair -p '{"spec":{"template":{"spec":{"volumes":[{"name":"quay-ssl","secret":{"secretName":"ca-redcloud","items":[{"key":"ca-bundle.crt","path":"ca.crt"}]}}]}}}}' ```
 
 6. Restart the Red Hat Quay pods. \
 ``` oc delete pod -l quay-enterprise-cr=quay-ecosystem -n quay-enterprise ```
