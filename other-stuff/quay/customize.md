@@ -64,12 +64,12 @@ DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 ``` export CONFIG=`cat config_tmp.yaml|base64 -w0` ``` \
 ``` oc patch -n quay-enterprise secret quay-enterprise-config-secret -p "{\"data\":{\"config.yaml\":\"$CONFIG\"}}" ```
 
-5. Because I'm using a private CA, I have to modify Clair to use the correct ```ca.crt```. Here I will patch the deployment to use the CA located in ca-redcloud which we created earlier. 
-
-``` oc -n quay-enterprise patch deployment.apps/quay-ecosystem-clair -p '{"spec":{"template":{"spec":{"volumes":[{"name":"quay-ssl","secret":{"secretName":"ca-redcloud","items":[{"key":"ca-bundle.crt","path":"ca.crt"}]}}]}}}}' ```
-
-6. Restart the Red Hat Quay pods. \
+5. Restart the Red Hat Quay pods. \
 ``` oc delete pod -l quay-enterprise-cr=quay-ecosystem -n quay-enterprise ```
+
+6. Because I'm using a private CA, I have to modify Clair to use the correct ```ca.crt```. Here I will patch the deployment to use the CA located in ca-redcloud which we created earlier. 
+
+``` oc -n quay-enterprise patch deployment.apps/quay-ecosystem-clair -p '{"spec":{"template":{"spec":{"volumes":[{"name":"quay-ssl","secret":{"secretName":"ca-redcloud","items":[{"key":"ca.crt","path":"ca.crt"}]}}]}}}}' ```
 
 ~~7. If Clair is used, it must also be aware of the custom certificate, otherwise it can't connect to the RHOCS NooBaa S3 service. In order to do that, created a separate Secret containing the certificate and patched the quay-clair deployment: \
 ``` cat openshift-service.ca > ca.crt ``` \

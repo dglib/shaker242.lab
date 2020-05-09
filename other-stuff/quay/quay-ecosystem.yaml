@@ -14,18 +14,18 @@ spec:
     resources:
       requests:
         memory: 1000Mi
-    # livenessProbe:
-    #   initialDelaySeconds: 120
-    #   httpGet:
-    #     path: /health/instance
-    #     port: 8443
-    #     scheme: HTTPS
-    # readinessProbe:
-    #   initialDelaySeconds: 10
-    #   httpGet:
-    #     path: /health/instance
-    #     port: 8443
-    #     scheme: HTTPS
+    livenessProbe:
+      initialDelaySeconds: 120
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
+    readinessProbe:
+      initialDelaySeconds: 10
+      httpGet:
+        path: /health/instance
+        port: 8443
+        scheme: HTTPS
     database:
       volumeSize: 10Gi
     configFiles:
