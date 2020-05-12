@@ -15,7 +15,7 @@ DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 
 
 LDAP_ADMIN_DN: uid=admin,cn=users,cn=accounts,dc=redcloud,dc=land
-LDAP_ADMIN_PASSWD: "J5rdfv5e4!"
+LDAP_ADMIN_PASSWD: <PASSWORD>
 LDAP_BASE_DN:
 - dc=redcloud
 - dc=land

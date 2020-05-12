@@ -1,6 +1,6 @@
 ## Installing Quay 3.2 with OCS 4.3 (noobaa/s3) on OCP 4.3 doesn't work right <eye-roll>
 
-## 7 days in and I have an additional fix in place that; for a time, solved my issue.
+## 8 days in and I have an additional fix in place that; but still not resolution.
 Evidently when you use a private CA the 'extraCaCert' property doesn't work properly. Go through these steps, and you'll see the CA part at the end I had to use.
 
 
@@ -105,7 +105,7 @@ Once the packages have been installed, visit "Installed Operators" and choose "Q
 
       iii. Add the entry yourself, I put it after the "data:|config.yaml:" entry and above the ssl.cert, ssl.key: \
       ```
-        custom-cert.crt: LS0tLS1CRUdJTiBDRVJUSUZJ...
+        service-ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJ...
       ```
 
       iv. Now restart the pods again: \

@@ -11,14 +11,6 @@ spec:
     configHostname: quayconfig.apps.openshift.redcloud.land
     imagePullSecretName: redhat-pull-secret
     sslCertificatesSecretName: custom-quay-ssl
-    # registryBackends:
-    #   - name: rhocs
-    #     rhocs:
-    #       hostname: s3.openshift-storage.svc
-    #       # secure: true
-    #       accessKey: 5WoGHLMc7bttzoNY3OXg
-    #       secretKey: Ega35e/QjsdigCJcRe/KlmrA96cgztpBkqXH/MoM
-    #       bucketName: quaystore
     resources:
       requests:
         memory: 1000Mi
@@ -37,8 +29,10 @@ spec:
     database:
       volumeSize: 10Gi
     configFiles:
-      - secretName: ca-redcloud
-        type: extraCaCert
+      - secretName: service-ca
+        files:
+          - key: service-ca.crt
+            type: extraCaCert
   clair:
     enabled: true
     imagePullSecretName: redhat-pull-secret
