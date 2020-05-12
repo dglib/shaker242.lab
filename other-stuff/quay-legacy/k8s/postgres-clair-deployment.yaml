@@ -26,8 +26,8 @@ spec:
           value: clair
         - name: POSTGRESQL_PASSWORD
           # Set the password for the Clair postgress user
-          value: test123
-        image: registry.access.redhat.com/rhscl/postgresql-10-rhel7:1-35
+          value: password
+        image: registry.redhat.io/rhel8/postgresql-10
         imagePullPolicy: IfNotPresent
         name: postgres-clair
         ports:

@@ -1,0 +1,40 @@
+FROM centos
+RUN dnf -y module disable container-tools \
+	&& dnf -y install 'dnf-command(copr)' \
+	&& dnf -y copr enable rhcontainerbot/container-selinux \
+	&& curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo \
+	&& dnf -y install podman buildah skopeo
+
+
+FROM jenkins/jenkins:lts
+USER root
+COPY --from=0 /usr/bin/podman /usr/bin/
+COPY --from=0 /usr/bin/skopeo /usr/bin/
+COPY --from=0 /usr/bin/buildah /usr/bin/
+RUN apt-get update \
+	&& apt-get upgrade -y \
+	&& apt-get install -y apt-utils \
+	&& apt-get install -y ca-certificates sudo libltdl-dev ldap-client \
+           btrfs-tools \
+           git \
+           golang-go \
+           go-md2man \
+           iptables \
+           libassuan-dev \
+           libbtrfs-dev \
+           libc6-dev \
+           libdevmapper-dev \
+           libglib2.0-dev \
+           libgpgme-dev \
+           libgpg-error-dev \
+           libprotobuf-dev \
+           libprotobuf-c0-dev \
+           libseccomp-dev \
+           libselinux1-dev \
+           libsystemd-dev \
+           pkg-config \
+           runc \
+           uidmap 
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+COPY ca.crt /usr/local/share/ca-certificates/
+RUN update-ca-certificates

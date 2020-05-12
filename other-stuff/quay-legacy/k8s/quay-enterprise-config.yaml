@@ -19,10 +19,10 @@ spec:
     spec:
       containers:
       - name: quay-enterprise-config-app
-        image: quay.io/redhat/quay:v3.1.0
+        image: quay.io/projectquay/quay:latest #quay.io/redhat/quay:v3.1.0
         ports:
         - containerPort: 8443
         command: ["/quay-registry/quay-entrypoint.sh"]
         args: ["config", "secret"]
       imagePullSecrets:
-        - name: redhat-quay-pull-secret
+        - name: redhat-pull-secret

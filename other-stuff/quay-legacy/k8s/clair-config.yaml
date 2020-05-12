@@ -4,7 +4,7 @@ clair:
     type: pgsql
     options:
       # Check that the database options match those set earlier in postgres-clair-deployment.yaml.
-      source: host=postgres-clair port=5432 dbname=clair user=clair password=test123 sslmode=disable
+      source: host=postgres-clair port=5432 dbname=clair user=clair password=password sslmode=disable
       cachesize: 16384
   api:
     # The port at which Clair will report its health status. For example, if Clair is running at
@@ -47,7 +47,7 @@ jwtproxy:
         options:
           # The ID of the service key generated for Clair. The ID is returned when setting up
           # the key in [Quay Enterprise Setup](security-scanning.md)
-          key_id: cd40f1c6a63f574c68ce882258925374882fac2b2f535ae5f8157c429e0c4b2e
+          key_id: 5cd094920c1d82b309877a135437e575dfafc413b02b814fbc04db3ee3b03d78
           private_key_path: /clair/config/security_scanner.pem
 
   verifier_proxies:

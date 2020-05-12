@@ -18,7 +18,7 @@ spec:
       namespace: quay-enterprise
     spec:
       containers:
-      - image: quay.io/redhat/clair-jwt:v3.0.4
+      - image: quay.io/bitnami/harbor-clair:latest
         imagePullPolicy: IfNotPresent
         name: clair-scanner
         ports:

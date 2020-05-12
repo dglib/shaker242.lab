@@ -18,7 +18,7 @@ spec:
       serviceAccountName: jenkins-service-account
       containers:
       - name: jenkins
-        image: shaker242/jenkins:0420
+        image: jenkins/jenkins
         livenessProbe:
           failureThreshold: 2
           httpGet:

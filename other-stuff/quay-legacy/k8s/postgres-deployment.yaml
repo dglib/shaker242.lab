@@ -14,18 +14,18 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: registry.access.redhat.com/rhscl/postgresql-10-rhel7:1-35
+          image: registry.redhat.io/rhel8/postgresql-10
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
           env:
           - name: POSTGRESQL_USER
-            # Replace "username" with a name for your Postgres user
-            value: "username"
+            # Replace "quay" with a name for your Postgres user
+            value: "quay"
           - name: POSTGRESQL_DATABASE
-            # Replace "password" with a password for your Postgres user
             value: "quay"
           - name: POSTGRESQL_PASSWORD
+            # Replace "password" with a password for your Postgres user
             value: "password"
           volumeMounts:
             - mountPath: /var/lib/pgsql/data
