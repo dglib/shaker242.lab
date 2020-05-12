@@ -10,8 +10,7 @@
 #   name: nexus
 # spec:
 #   finalizers:
-#   - kubernetes
-# ---
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,7 +19,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: nexus
@@ -31,7 +30,7 @@ spec:
     spec:
       containers:
         - name: nexus
-          image: sonatype/nexus3:latest
+          image: docker.io/sonatype/nexus3
           resources:
             limits:
               memory: "2Gi"
@@ -39,34 +38,35 @@ spec:
             requests:
               memory: "1Gi"
               cpu: "500m"
-          readinessProbe:
-            tcpSocket:
-              port: 8081
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            tcpSocket:
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-            periodSeconds: 3
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: 8081
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: 8081
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 20
+          #   periodSeconds: 3
           ports:
-            - containerPort: 8081
+            - containerPort: 8081 # web
+            - containerPort: 5000 # docker
           volumeMounts:
             - name: nexus-data
               mountPath: /nexus-data
       volumes:
       - name: nexus-data
         persistentVolumeClaim:
-          claimName: nexus-pvc
+          claimName: nexus-rbd
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nexus-pvc
+  name: nexus-rbd
   namespace: nexus
   annotations:
-    volume.beta.kubernetes.io/storage-class: "auto-nfs"
+    volume.beta.kubernetes.io/storage-class: "storagecluster-ceph-rbd"
 spec:
   accessModes:
     - ReadWriteOnce
