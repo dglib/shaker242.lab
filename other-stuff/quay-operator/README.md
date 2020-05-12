@@ -18,7 +18,7 @@ OpenShift cluster: You need a privileged account to an OpenShift 4.x cluster on 
 In this guide, I'll setup Quay & Clair with self-signed certificates (CA). 
 
 ---
-### Environmental notes:
+### Environmental notes: quay-ecosystem.yaml
 
 * My lab domain for this install is ```redcloud.land```.
 * NFS dynamic provisioning is being used, referred as to ```auto-nfs```.
