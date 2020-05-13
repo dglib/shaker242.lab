@@ -19,26 +19,26 @@ spec:
       containers:
       - name: jenkins
         image: jenkins/jenkins
-        livenessProbe:
-          failureThreshold: 2
-          httpGet:
-            path: /login
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 420
-          periodSeconds: 360
-          successThreshold: 1
-          timeoutSeconds: 240
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /login
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 3
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 240
+        # livenessProbe:
+        #   failureThreshold: 2
+        #   httpGet:
+        #     path: /login
+        #     port: 8080
+        #     scheme: HTTP
+        #   initialDelaySeconds: 420
+        #   periodSeconds: 360
+        #   successThreshold: 1
+        #   timeoutSeconds: 240
+        # readinessProbe:
+        #   failureThreshold: 3
+        #   httpGet:
+        #     path: /login
+        #     port: 8080
+        #     scheme: HTTP
+        #   initialDelaySeconds: 3
+        #   periodSeconds: 10
+        #   successThreshold: 1
+        #   timeoutSeconds: 240
         resources:
           limits:
             memory: 2Gi

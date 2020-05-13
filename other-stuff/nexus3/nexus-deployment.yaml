@@ -38,20 +38,20 @@ spec:
             requests:
               memory: "1Gi"
               cpu: "500m"
-          # readinessProbe:
-          #   tcpSocket:
-          #     port: 8081
-          #   initialDelaySeconds: 5
-          #   periodSeconds: 10
-          # livenessProbe:
-          #   tcpSocket:
-          #     port: 8081
-          #   initialDelaySeconds: 15
-          #   periodSeconds: 20
-          #   periodSeconds: 3
+          readinessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          livenessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            periodSeconds: 3
           ports:
             - containerPort: 8081 # web
-            - containerPort: 5000 # docker
+            - containerPort: 5000 # docker registry
           volumeMounts:
             - name: nexus-data
               mountPath: /nexus-data
