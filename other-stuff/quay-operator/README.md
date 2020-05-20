@@ -1,9 +1,6 @@
 ## Installing Quay 3.3 with OCS 4.3 (noobaa/s3) on OCP 4.4 
 This doesn't work via the configuration; you have to edit the config yaml; details below.
 
-Note: Evidently when you use a private CA the 'extraCaCert' property doesn't work properly. Go through these steps, and you'll see the CA part at the end I had to use.
-
-
 Ref: \
 https://github.com/redhat-cop/quay-operator/issues/137 \
 https://access.redhat.com/solutions/4893721
@@ -29,13 +26,13 @@ In this guide, I'll setup Quay & Clair with self-signed certificates (CA).
 * An OpenShift 4.x cluster
 * Cluster-scope admin privilege to the OpenShift cluster
 * Create a namespace for the Operator \
-```$ oc create ns quay-enterprise```
+``` oc create ns quay-enterprise```
 
 * Inject the CA.pem into a stored secret \
-```$ oc -n quay-enterprise create secret generic ca-redcloud --from-file=ca.crt=<path_to_file>```
+``` oc -n quay-enterprise create secret generic ca-redcloud --from-file=ca.crt=<ca.crt>```
 
 * Inject the URL private crt/key into a secret for hostname mapping \
-```$ oc -n quay-enterprise create secret generic custom-quay-ssl --from-file=ssl.key=<ssl_private_key> --from-file=ssl.cert=<ssl_certificate> ```
+``` oc create secret tls custom-quay-ssl --key=<quay.key> --cert=<quay.crt> ```
 
 * Create the pull secret which provides credentials to pull containers from the Quay.io registry: \
 ``` oc create -f redhat-pull-secret.yaml ```

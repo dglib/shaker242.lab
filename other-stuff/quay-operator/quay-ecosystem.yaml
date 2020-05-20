@@ -4,11 +4,15 @@ metadata:
   name: quay-ecosystem
 spec:
   quay:
+    externalAccess: 
+      type: Route
+      hostname: quay.redcloud.land
+      configHostname: quayconfig.apps.openshift.redcloud.land
+      tls:
+        secretName: custom-quay-ssl
+        termination: passthrough
     keepConfigDeployment: true
-    hostname: quay.redcloud.land
-    configHostname: quayconfig.apps.openshift.redcloud.land
     imagePullSecretName: redhat-pull-secret
-    sslCertificatesSecretName: custom-quay-ssl
     database:
       volumeSize: 10Gi
     configFiles:
