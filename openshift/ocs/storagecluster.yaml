@@ -26,5 +26,5 @@ spec:
         volumeMode: Block
         resources:
           requests:
-            storage: 100Gi 
+            storage: 500Gi 
     portable: true

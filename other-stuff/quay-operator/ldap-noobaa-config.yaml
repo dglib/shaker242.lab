@@ -4,12 +4,12 @@ AUTHENTICATION_TYPE: LDAP
 DISTRIBUTED_STORAGE_CONFIG:
   default:
   - RHOCSStorage
-  - access_key: 5WoGHLMc7bttzoNY3OXg
-    bucket_name: quaystore
+  - access_key: 2B8mFEzVBGg5Bgxl2agP
+    bucket_name: quaystore-67044de8-b35a-4816-bd52-60619a0eba6b
     hostname: s3.openshift-storage.svc
     is_secure: true
     port: '443'
-    secret_key: Ega35e/QjsdigCJcRe/KlmrA96cgztpBkqXH/MoM
+    secret_key: 88VRXfscyoTVCq0Qf6ApQFF1AhVekQrkH5H+lWMO
     storage_path: /datastorage/registry
 DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 

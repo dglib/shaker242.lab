@@ -38,17 +38,6 @@ spec:
             requests:
               memory: "1Gi"
               cpu: "500m"
-          readinessProbe:
-            tcpSocket:
-              port: 8081
-            initialDelaySeconds: 20
-            periodSeconds: 20
-          livenessProbe:
-            tcpSocket:
-              port: 8081
-            initialDelaySeconds: 15
-            periodSeconds: 20
-            periodSeconds: 3
           ports:
             - containerPort: 8081 # web
             - containerPort: 5000 # docker registry
@@ -58,19 +47,17 @@ spec:
       volumes:
       - name: nexus-data
         persistentVolumeClaim:
-          claimName: nexus-rbd
+          claimName: nexus-nfs
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: nexus-rbd
+  name: nexus-nfs
   namespace: nexus
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "storagecluster-ceph-rbd"
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
       storage: 10Gi
-
+  storageClassName: "auto-nfs"

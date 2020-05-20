@@ -5,33 +5,16 @@ metadata:
 spec:
   quay:
     keepConfigDeployment: true
-    # external hostname, in dns and tls
     hostname: quay.redcloud.land
-    # external mapping for the configuration page - here we'll setup LDAP and deselect Docker V1 support to allow it
     configHostname: quayconfig.apps.openshift.redcloud.land
     imagePullSecretName: redhat-pull-secret
     sslCertificatesSecretName: custom-quay-ssl
-    resources:
-      requests:
-        memory: 1000Mi
-    livenessProbe:
-      initialDelaySeconds: 120
-      httpGet:
-        path: /health/instance
-        port: 8443
-        scheme: HTTPS
-    readinessProbe:
-      initialDelaySeconds: 10
-      httpGet:
-        path: /health/instance
-        port: 8443
-        scheme: HTTPS
     database:
       volumeSize: 10Gi
     configFiles:
-      - secretName: service-ca
+      - secretName: ca-redcloud
         files:
-          - key: service-ca.crt
+          - key: ca.crt
             type: extraCaCert
   clair:
     enabled: true

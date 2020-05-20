@@ -14,4 +14,27 @@ spec:
   ports:
     - port: 8081
       targetPort: 8081
-      #nodePort: 32000
+      name: ui
+    - port: 5000
+      targetPort: 5000
+      name: docker
+
+# ---
+# apiVersion: route.openshift.io/v1
+# kind: Route
+# metadata:
+#   labels:
+#     app: nexus
+#   name: nexus
+#   namespace: nexus
+# spec:
+#   host: nexus.redcloud.land
+#   port:
+#     targetPort: 8081
+#   to:
+#     kind: Service
+#     name: nexus-svc
+#   tls:
+#     secretName: nexus-tls 
+#     insecureEdgeTerminationPolicy: Redirect
+#     termination: edge
