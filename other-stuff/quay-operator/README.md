@@ -1,8 +1,7 @@
 ## Installing Quay 3.3 with OCS 4.3 (noobaa/s3) on OCP 4.4 
 This doesn't work via the configuration; you have to edit the config yaml; details below.
 
-## 8 days in and I have an additional fix in place that; but still no resolution... maybe you'd rather just use NFS?
-Evidently when you use a private CA the 'extraCaCert' property doesn't work properly. Go through these steps, and you'll see the CA part at the end I had to use.
+Note: Evidently when you use a private CA the 'extraCaCert' property doesn't work properly. Go through these steps, and you'll see the CA part at the end I had to use.
 
 
 Ref: \
@@ -12,7 +11,7 @@ https://access.redhat.com/solutions/4893721
 
 # Deploy Red Hat Quay on OpenShift with Quay Setup Operator
 
-Red Hat Quay 3.2
+Red Hat Quay 3.3
 
 OpenShift cluster: You need a privileged account to an OpenShift 4.x cluster on which to deploy the Red Hat Quay Operator. That account must have the ability to create namespaces at the cluster scope. 
 
