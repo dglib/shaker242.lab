@@ -24,3 +24,8 @@ spec:
     enabled: true
     imagePullSecretName: redhat-pull-secret
     updateInterval: "60m"
+    configFiles:
+      - secretName: ca-redcloud
+        files:
+          - key: ca.crt
+            type: extraCaCert

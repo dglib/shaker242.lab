@@ -1,5 +1,9 @@
 ## SETUP REDCLOUD
 
+### Accept all CSR's 
+``` oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve ```
+
+
   ## Replace the default api certificate
 1. Create the api-bundle certificate, in order indicated. \
 ``` cat api.crt intermediate.crt ca.crt > api-bundle.crt ```
@@ -10,7 +14,7 @@
 3. Patch the API server with the new secret/api-bundle. \
 ``` oc patch apiserver cluster --type=merge -p '{"spec":{"servingCerts": {"namedCertificates":[{"names": ["api.openshift.redcloud.land"],"servingCertificate": {"name": "api-redcloud-bundle"}}]}}}' ```
 
-*You'll lose access with the .kube/config file; replace the data field "certificate-authority-data" with a base64 hash of your ca-bundle.crt below.
+*You'll lose access with the .kube/config file; replace the data field "certificate-authority-data" with a base64 hash of your ca-bundle.crt below OR better yet, start over with the CA added. 
 
   ## Update the default ingress certificate
 
@@ -67,7 +71,7 @@
 ``` oc adm policy add-cluster-role-to-group sudoer ocp-production ```
 
 19. Restrict ocp-developers from creating projects: \
-```o c annotate clusterrolebinding self-provisioners --overwrite 'rbac.authorization.kubernetes.io/autoupdate=false' ``` \
+``` oc annotate clusterrolebinding self-provisioners --overwrite 'rbac.authorization.kubernetes.io/autoupdate=false' ``` \
 ``` oc adm policy remove-cluster-role-from-group self-provisioner system:authenticated:oauth ``` \
 ``` oc patch projects.config.openshift.io cluster --type=merge -p "$(cat ocp-dev-message.json)" ```
 
@@ -92,4 +96,4 @@ storage:
     claim: image-registry-storage
 ``` 
 24. Add HA configuration by scaling to 2 pods:
-``` oc scale --replicas=2 deployment.apps/image-registry ```
+``` oc scale --replicas=2 deployment.apps/image-registry -n openshift-image-registry ```

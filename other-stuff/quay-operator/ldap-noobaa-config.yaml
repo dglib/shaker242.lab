@@ -4,18 +4,18 @@ AUTHENTICATION_TYPE: LDAP
 DISTRIBUTED_STORAGE_CONFIG:
   default:
   - RHOCSStorage
-  - access_key: 2B8mFEzVBGg5Bgxl2agP
-    bucket_name: quaystore-67044de8-b35a-4816-bd52-60619a0eba6b
+  - access_key: MjtiOrqFXwiBaTamlWbg
+    bucket_name: quaystore
     hostname: s3.openshift-storage.svc
     is_secure: true
     port: '443'
-    secret_key: 88VRXfscyoTVCq0Qf6ApQFF1AhVekQrkH5H+lWMO
+    secret_key: rg8lP01iuHNiRZDfeg+R/Vt5G9UWtoEZyDMuwzoH
     storage_path: /datastorage/registry
 DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
 
 
 LDAP_ADMIN_DN: uid=admin,cn=users,cn=accounts,dc=redcloud,dc=land
-LDAP_ADMIN_PASSWD: <PASSWORD>
+LDAP_ADMIN_PASSWD: J5rdfv5e4!
 LDAP_BASE_DN:
 - dc=redcloud
 - dc=land

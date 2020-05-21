@@ -1,9 +1,4 @@
 ## Installing Quay 3.3 with OCS 4.3 (noobaa/s3) on OCP 4.4 
-This doesn't work via the configuration; you have to edit the config yaml; details below.
-
-Ref: \
-https://github.com/redhat-cop/quay-operator/issues/137 \
-https://access.redhat.com/solutions/4893721
 
 
 # Deploy Red Hat Quay on OpenShift with Quay Setup Operator
@@ -12,13 +7,13 @@ Red Hat Quay 3.3
 
 OpenShift cluster: You need a privileged account to an OpenShift 4.x cluster on which to deploy the Red Hat Quay Operator. That account must have the ability to create namespaces at the cluster scope. 
 
-In this guide, I'll setup Quay & Clair with self-signed certificates (CA). 
+In this guide, I'll setup Quay & Clair with private self-signed certificates and ca, but only partially. 
 
 ---
 ### Environmental notes: quay-ecosystem.yaml
 
-* My lab domain for this install is ```redcloud.land```.
-* NFS dynamic provisioning is being used, referred as to ```auto-nfs```.
+* My lab domain for this install is `redcloud.land`.
+* NFS dynamic provisioning is being used, referred as to `auto-nfs`.
 * All default environment accounts/passwords were unmodified.
 
 ---
@@ -26,87 +21,47 @@ In this guide, I'll setup Quay & Clair with self-signed certificates (CA).
 * An OpenShift 4.x cluster
 * Cluster-scope admin privilege to the OpenShift cluster
 * Create a namespace for the Operator \
-``` oc create ns quay-enterprise```
+``` oc new-project quay-enterprise --display-name "Red Hat Quay" ```
 
 * Inject the CA.pem into a stored secret \
-``` oc -n quay-enterprise create secret generic ca-redcloud --from-file=ca.crt=<ca.crt>```
+``` oc -n quay-enterprise create secret generic ca-redcloud --from-file=ca.crt=<ca.crt> ```
 
 * Inject the URL private crt/key into a secret for hostname mapping \
-``` oc create secret tls custom-quay-ssl --key=<quay.key> --cert=<quay.crt> ```
+``` cat quay.crt intermediate.crt ca.crt > quay-bundle.crt ``` \
+``` oc create secret tls custom-quay-ssl --key=<quay.key> --cert=quay-bundle.crt ```
 
 * Create the pull secret which provides credentials to pull containers from the Quay.io registry: \
 ``` oc create -f redhat-pull-secret.yaml ```
 
 ---
-Install the Operator itself, via the UI, navigate to Operators > Operator Hub > Search for "Quay"; you should see the Quay Operator provided by Red Hat, select it and choose "Install".
+1. Install the Operator itself, via the UI, navigate to Operators > Operator Hub > Search for "Quay"; you should see the Quay Operator provided by Red Hat, select it and choose "Install".
 
-Once the packages have been installed, visit "Installed Operators" and choose "Quay", if you don't see it; make sure that you have selected the project quay-enterprise or "all projects". Choose ```+Create Instance``` and replace the yaml file presented with your modified verison of ```quay-ecosystem.yaml``` (included for reference).
+2. Once the packages have been installed, visit "Installed Operators" and choose "Quay", if you don't see it; make sure that you have selected the project quay-enterprise or "all projects". Choose `+Create Instance` and replace the yaml file presented with your modified verison of `quay-ecosystem.yaml` (included for reference).
 
-## *SSL error when deploying Quay with a RHOCS storage backend - fix.*
->> See: https://access.redhat.com/solutions/4893721 for resolution
+3. Deploy the QuayEcosystem without any storage configuration and make sure to include the custom CA certificate.
 
-1. Deploy the QuayEcosystem without any storage configuration and make sure to include the custom CA certificate.
+4. Access the quayconfig URL and select to Modify Configuration; and do so as you need. \
+Add the setting for your Noobaa storage and if you intend to use Clair, keep it on port 80 (see below). Both Quay and Clair cannot use private certificates to access Noobaa S3 storage... I have personally tried for 2 weeks along with all the hacks of exporting and editing the config like below... Don't do it.
 
-      ## Stop! You have a choice to make here:
-
-      i. Access the config route and setup LDAP/OAUT stuff if you intend to use it and save the config (don't setup storage at this point).
-      
-      ii. Continue without modifying the config for LDAP, just know that once Noobaa is setup, modifying the configuration may break your setup. Keep that config backup (the one you're about to grap in the below step 2).
-
-2. Reconfigure the generated quay config which is stored in a secret called quay-enterprise-config-secret. \
+## Reconfigure the generated quay config which is stored in a secret called quay-enterprise-config-secret. \
 ``` oc get -n quay-enterprise secret quay-enterprise-config-secret -o yaml | grep config.yaml | awk '{ print $2}' | base64 -d > config_tmp.yaml ```
 
-3. Replace the default config with noobaa config:
-
-      ```
-      DISTRIBUTED_STORAGE_CONFIG:
-        default:tls
-        - LocalStorage
-        - storage_path: /datastorage/registry
-      DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
-      ```
-
-      example:
-
-      ```
+```
       DISTRIBUTED_STORAGE_CONFIG:
         default:
         - RHOCSStorage
         - access_key: YOUR_ACCESSKEY
           bucket_name: YOUR_BUCKETNAME
-          hostname: s3.openshift-storage.svc
-          is_secure: true
-          port: '443'
+          hostname: s3.openshift-storage.svc:80
+          is_secure: false
           secret_key: YOUR_SECRETKEY
           storage_path: /datastorage/registry
       DISTRIBUTED_STORAGE_DEFAULT_LOCATIONS: []
-      ```
+```
 
-4. Patch the quay-enterprise-config-secret. \
-``` export CONFIG=`cat config_tmp.yaml|base64 -w0` ``` \
-``` oc patch -n quay-enterprise secret quay-enterprise-config-secret -p "{\"data\":{\"config.yaml\":\"$CONFIG\"}}" ```
-
-5. Restart the Red Hat Quay pods. \
-``` oc delete pod -l quay-enterprise-cr=quay-ecosystem -n quay-enterprise ```
-
-6. Because I'm using a private CA, I have to modify Clair to use the correct ```ca.crt```. Here I will patch the deployment to use the CA located in ca-redcloud which we created earlier: \
-``` oc -n quay-enterprise patch deployment.apps/quay-ecosystem-clair -p '{"spec":{"template":{"spec":{"volumes":[{"name":"quay-ssl","secret":{"secretName":"ca-redcloud","items":[{"key":"ca.crt","path":"ca.crt"}]}}]}}}}' ```
-
-7. Because we have a hacky setup now; Why are you using an Operator? Anyway, I found that the ca.cert in extraCACert wasn't being uploaded in the config. Let's put it there ourselves.
-
-      i. Copy these contents and we'll manually edit the config file: \
-      ``` cat ca.crt | base64 -w 0 ```
-
-      ii. Edit the config secret: \
-      ``` oc -n quay-enterprise edit secret quay-enterprise-config-secret ```
-
-      iii. Add the entry yourself, I put it after the "data:|config.yaml:" entry and above the ssl.cert, ssl.key: \
-      ```
-        service-ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJ...
-      ```
-
-      iv. Now restart the pods again: \
-      ``` oc delete pod -l quay-enterprise-cr=quay-ecosystem -n quay-enterprise ```
+Troubleshooting Ref: \
+https://github.com/redhat-cop/quay-operator/issues/137 \
+https://access.redhat.com/solutions/4893721
 
 
 More info ```https://github.com/redhat-cop/quay-operator```
