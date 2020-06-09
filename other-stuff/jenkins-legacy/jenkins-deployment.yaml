@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: jenkins
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      serviceAccountName: jenkins-service-account
+      containers:
+      - name: jenkins
+        image: quay.redcloud.land/shaker/jenkins:lts-centos
+        resources:
+          limits:
+            memory: 2Gi
+        securityContext:
+          capabilities: {}
+          privileged: false
+        ports:
+        - containerPort: 8080
+        - containerPort: 50000
+        volumeMounts:
+        - mountPath: /var/jenkins_home
+          name: jenkins-data
+      volumes:
+      - name: jenkins-data
+        persistentVolumeClaim:
+          claimName: jenkins-data
