@@ -18,7 +18,7 @@ spec:
       serviceAccountName: jenkins-service-account
       containers:
       - name: jenkins
-        image: quay.redcloud.land/shaker/jenkins:lts-centos
+        image: quay.redcloud.land/apps/jenkins:centos
         resources:
           limits:
             memory: 2Gi
