@@ -25,8 +25,6 @@ In this guide, I'll setup Quay & Clair with self-signed certificates (CA).
 ``` cat quay.crt intermediate.crt ca.crt > quay-bundle.crt ``` \
 ``` oc -n quay-enterprise create secret generic custom-quay-ssl --from-file=ssl.key=quay.key --from-file=ssl.cert=quay-bundle.crt ```
 
-* Create the pull secret which provides credentials to pull containers from the Quay.io registry: \
-``` oc create -f redhat-pull-secret.yaml ```
 
 ### Installation 
 

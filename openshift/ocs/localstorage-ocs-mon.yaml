@@ -13,7 +13,6 @@ spec:
           - linux0
           - linux1
           - linux2
-          # - linux3
   storageClassDevices:
     - storageClassName: "localstorage-ocs-mon-sc"
       volumeMode: Filesystem

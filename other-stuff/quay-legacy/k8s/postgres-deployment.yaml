@@ -1,5 +1,5 @@
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
@@ -7,6 +7,9 @@ metadata:
 spec:
   # Only one instance of the postgres database is defined here. Adjust replicas based on demand.
   replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
   template:
     metadata:
       labels:
