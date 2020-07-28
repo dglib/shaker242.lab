@@ -1,0 +1,20 @@
+# apiVersion: "local.storage.openshift.io/v1"
+# kind: "LocalVolume"
+# metadata:
+#   name: "localstorage-ocs-ssd"
+#   namespace: "openshift-storage"
+# spec:
+#   nodeSelector:
+#     nodeSelectorTerms:
+#     - matchExpressions:
+#         - key: kubernetes.io/hostname
+#           operator: In
+#           values:
+#             - linux0
+#             - linux1
+#             - linux2
+#   storageClassDevices:
+#     - storageClassName: "localstorage-ocs-ssd-sc"
+#       volumeMode: Block 
+#       devicePaths:
+#         - /dev/sdd

@@ -10,9 +10,9 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-            - linux0
-            - linux1
-            - linux2
+          - linux0
+          - linux1
+          - linux2
   storageClassDevices:
     - storageClassName: "localstorage-ocs-osd-sc"
       volumeMode: Block 

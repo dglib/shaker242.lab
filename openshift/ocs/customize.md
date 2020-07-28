@@ -86,3 +86,10 @@ kubectl get namespace "$PROJECT" -o json | jq 'del(.spec.finalizers[] | select("
 
 # proxy will get killed by the trap
 ```
+
+
+## Forcefully remove a rook/vols...
+
+```
+for i in $(oc get node -l cluster.ocs.openshift.io/openshift-storage= -o jsonpath='{ .items[*].metadata.name }'); do oc debug node/${i} -- chroot /host rm -rfv /var/lib/rook; done
+```

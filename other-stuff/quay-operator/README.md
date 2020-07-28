@@ -1,4 +1,4 @@
-## Installing Quay 3.3 with OCS 4.3 (noobaa/s3) on OCP 4.4 
+## Installing Quay 3.3 with OCS 4.4 (noobaa/s3) on OCP 4.4 
 
 
 # Deploy Red Hat Quay on OpenShift with Quay Setup Operator
@@ -44,7 +44,9 @@ In this guide, I'll setup Quay & Clair with private self-signed certificates and
 Add the setting for your Noobaa storage and LDAP. For Noobaa, use the endpoint and not the service if you're using a private cert... 
 
 5. If you are using a private CA, inject it into the certificate section at the top. \
-` Endpoint: s3-openshift-storage.apps.openshift.redcloud.land `
+` Endpoint: s3-openshift-storage.apps.openshift.redcloud.land:443 `
+
+6. Quay is kinda horrible... but to get it to work manually add the ca.crt (base64) into the quay-enterprise-config secret if you get a ssl error.
 
 
 

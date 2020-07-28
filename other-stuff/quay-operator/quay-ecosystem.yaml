@@ -2,10 +2,10 @@ apiVersion: redhatcop.redhat.io/v1alpha1
 kind: QuayEcosystem
 metadata:
   name: quay-ecosystem
+  namespace: quay-enterprise
 spec:
   quay:
     externalAccess: 
-      type: Route
       hostname: quay.redcloud.land
       configHostname: quayconfig.apps.openshift.redcloud.land
       tls:
@@ -23,7 +23,6 @@ spec:
   clair:
     enabled: true
     imagePullSecretName: redhat-pull-secret
-    updateInterval: "60m"
     configFiles:
       - secretName: ca-redcloud
         files:

@@ -95,5 +95,30 @@ storage:
   pvc:
     claim: image-registry-storage
 ``` 
-24. Add HA configuration by scaling to 2 pods:
+24. Add HA configuration by scaling to 2 pods: \
 ``` oc scale --replicas=2 deployment.apps/image-registry -n openshift-image-registry ```
+
+25. Fix for 4.5 \
+```oc patch imagepruner.imageregistry/cluster --patch '{"spec":{"suspend":true}}' --type=merge``` \
+```oc -n openshift-image-registry delete jobs --all```
+
+
+```
+$ oc get machines                                                              
+NAME                       PHASE   TYPE   REGION   ZONE   AGE
+openshift-kkljw-master-0                                  36m
+openshift-kkljw-master-1                                  36m
+openshift-kkljw-master-2                                  36m
+
+$ oc delete machine openshift-kkljw-master-0 openshift-kkljw-master-1 openshift-kkljw-master-2
+machine.machine.openshift.io "openshift-kkljw-master-0" deleted
+machine.machine.openshift.io "openshift-kkljw-master-1" deleted
+machine.machine.openshift.io "openshift-kkljw-master-2" deleted
+
+$ oc get machinesets                                                                          
+NAME                     DESIRED   CURRENT   READY   AVAILABLE   AGE
+openshift-kkljw-worker   0         0                             36m
+
+$ oc delete machineset openshift-kkljw-worker                                                 
+machineset.machine.openshift.io "openshift-kkljw-worker" deleted
+```

@@ -1,9 +1,19 @@
+## edit the deployments rook-ceph-mds-storagecluster-cephfilesystem-a & rook-ceph-mds-storagecluster-cephfilesystem-b
+## to set the cpu request to =1
+
+
 apiVersion: ocs.openshift.io/v1
 kind: StorageCluster
 metadata:
   namespace: openshift-storage
   name: storagecluster
 spec:
+  resources:
+    mds:
+      limits:
+        cpu: 3
+      requests:
+        cpu: 1
   manageNodes: false
   monPVCTemplate:
     spec:
