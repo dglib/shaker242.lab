@@ -1,0 +1,17 @@
+apiVersion: nmstate.io/v1alpha1
+kind: NodeNetworkConfigurationPolicy
+metadata:
+  name: vlan-1-policy 
+spec:
+  nodeSelector: 
+    node-role.kubernetes.io/worker: ""
+    # kubernetes.io/hostname: <node01> 
+  desiredState:
+    interfaces:
+    - name: ens224.1 
+      description: VLAN using ens224 
+      type: vlan 
+      state: up 
+      vlan:
+        base-iface: ens224 
+        id: 1 

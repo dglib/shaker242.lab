@@ -99,9 +99,17 @@ storage:
 ``` oc scale --replicas=2 deployment.apps/image-registry -n openshift-image-registry ```
 
 25. Fix for 4.5 \
-```oc patch imagepruner.imageregistry/cluster --patch '{"spec":{"suspend":true}}' --type=merge``` \
-```oc -n openshift-image-registry delete jobs --all```
+``` oc patch imagepruner.imageregistry/cluster --patch '{"spec":{"suspend":true}}' --type=merge ``` \
+``` oc -n openshift-image-registry delete jobs --all```
 
+26. Set registry for external access \
+``` oc patch --type=merge configs.imageregistry cluster --patch='{"spec": {"defaultRoute": true}}' ``` \
+    ex: default-route-openshift-image-registry.apps.openshift.redcloud.land
+
+27. Add permissions to the internal registry for podman logins \
+``` oc policy add-role-to-group registry-viewer ocp-users ``` \
+``` oc policy add-role-to-group registry-editor ocp-users ``` \
+` podman login -u $(oc whoami) -p $(oc whoami -t) default-route-openshift-image-registry.apps.openshift.redcloud.land `
 
 ```
 $ oc get machines                                                              

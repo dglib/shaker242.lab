@@ -18,13 +18,18 @@ spec:
       serviceAccountName: jenkins-service-account
       containers:
       - name: jenkins
-        image: quay.redcloud.land/apps/jenkins:centos
+        image: jenkins/jenkins:lts
         resources:
           limits:
             memory: 2Gi
         securityContext:
           capabilities: {}
           privileged: false
+        env:
+        # - name: OPENSHIFT_ENABLE_OAUTH
+        #   value: "true"
+        - name: DISABLE_ADMINISTRATIVE_MONITORS
+          value: "true"
         ports:
         - containerPort: 8080
         - containerPort: 50000

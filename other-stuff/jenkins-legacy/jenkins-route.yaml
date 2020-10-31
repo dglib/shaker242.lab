@@ -9,7 +9,7 @@ metadata:
 spec:
   host: jenkins.apps.openshift.redcloud.land
   port:
-    targetPort: http
+    targetPort: 8080
   to:
     kind: Service
     name: jenkins
